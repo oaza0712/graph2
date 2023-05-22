@@ -11,7 +11,7 @@ let tableCreated = false;
 
 
 //ADDING BUTTONS TO PAGE
-  function create_input_table(tableId, buttonId, dataCardsId) {
+  export function create_input_table(tableId, buttonId, dataCardsId) {
   let tableElement = document.getElementById(tableId);
 
   let tableButtons = document.getElementById(buttonId);
