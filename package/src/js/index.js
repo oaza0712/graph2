@@ -649,8 +649,11 @@ function KidChart(typeOfChart, userData, canvasId) {
 
   return myKidChart;
 }
-
 export default {
   create_input_table,
   collectButton
 };
+/*export default 
+{  create_input_table,
+  collectButton}
+;*/
