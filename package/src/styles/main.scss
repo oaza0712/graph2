@@ -1,0 +1,481 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.chat-container {
+  height: 100%;
+}
+
+.chat-body {
+  background-color: #eee;
+  height: calc(100vh - 206px);
+}
+
+.chat-utilities {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 0.5rem;
+  padding: 1.5rem 1rem 1rem;
+  height: 206px;
+}
+.chat-utilities .utility-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+}
+.chat-utilities .utility-container ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 25px;
+  background-color: #eee;
+  position: relative;
+}
+.chat-utilities .utility-container ul li {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 1rem;
+  overflow: hidden;
+}
+.chat-utilities .utility-container ul li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.chat-utilities .utility-container ul li img {
+  height: 100%;
+  opacity: 0.8;
+}
+.chat-utilities .utility-container ul li.emoji-selector {
+  background-color: white;
+  border-radius: 1rem;
+  cursor: default;
+  display: block;
+  padding: 0;
+  border: 1px solid #eee;
+  position: absolute;
+  bottom: 0%;
+  width: 325px;
+  height: 350px;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  overflow: auto;
+  transition: bottom 0.3s ease, opacity 0.3s ease;
+}
+.chat-utilities .utility-container ul li.emoji-selector.active {
+  bottom: 110%;
+  opacity: 1;
+  pointer-events: all;
+}
+.chat-utilities .utility-container ul li.emoji-selector .input-container {
+  padding: 1rem;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.chat-utilities .utility-container ul li.emoji-selector .input-container input {
+  border-radius: 25px;
+  border: 1px solid #eee;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  outline: none;
+}
+.chat-utilities .utility-container ul li.emoji-selector ul.emoji-list {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0 1rem 1rem;
+  border-radius: 0;
+}
+.chat-utilities .utility-container ul li.emoji-selector ul.emoji-list li {
+  height: 35px;
+  width: 35px;
+  border-radius: 0.25rem;
+  font-size: 1.5rem;
+}
+.chat-utilities form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #eee;
+  border-radius: 50px;
+  overflow: hidden;
+  width: 100%;
+}
+.chat-utilities form input, .chat-utilities form button {
+  outline: none;
+  border: none;
+  padding: 0.5rem;
+  height: 50px;
+}
+.chat-utilities form input {
+  background-color: transparent;
+  width: 100%;
+  padding-left: 1.5rem;
+  font-size: 1.2rem;
+  color: rgb(59, 69, 84);
+}
+.chat-utilities form button {
+  background-color: rgb(111, 109, 226);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 0 2rem;
+  color: white;
+}
+.chat-utilities form button img {
+  filter: invert(1);
+  margin-left: 1rem;
+  width: 1.2rem;
+}
+.picker {
+  border-radius: 5px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  -webkit-transition: all linear .2s;
+  -moz-transition: all linear .2s;
+  -ms-transition: all linear .2s;
+  -o-transition: all linear .2s;
+  transition: all linear .2s;
+  border: thin solid #eee;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.chartMenu {
+  width: 100vw;
+  height: 40px;
+  background: #1a1a1a;
+  color: rgba(54, 162, 235, 1);
+}
+
+.chartMenu p {
+  padding: 10px;
+  font-size: 20px;
+}
+
+.chartCard {
+  width: 100vw;
+  height: calc(100vh - 40px);
+  background: rgba(54, 162, 235, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chartBox {
+  width: 700px;
+  padding: 20px;
+  border-radius: 20px;
+  border: solid 3px rgba(54, 162, 235, 1);
+  background: white;
+}
+
+td {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgb(99, 196, 215);
+  box-shadow: 10px 10px 5px lightblue;
+}
+
+
+/* CSS */
+#tableButtons {
+  display: flex;
+
+}
+
+.button-85 {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.6em 2em;
+  border: none;
+  outline: none;
+  color: rgb(99, 196, 215);
+  background: #ffffff;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-85:before {
+  content: "";
+  background: linear-gradient(45deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #7a00ff,
+      #ff00c8,
+      #ff0000);
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 200%;
+  z-index: -1;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing-button-85 20s linear infinite;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 5%;
+}
+
+@keyframes glowing-button-85 {
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.button-85:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  left: 0;
+  top: 0;
+  border-radius: 5%;
+}
+
+div.dataCards {
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+div.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+  margin: 10px;
+  flex-basis: 20%;
+
+}
+
+div.header {
+  height: 120px;
+  background-color: #f6ffff;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  font-size: 40px;
+  border: 10px rgba(54, 162, 235, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.chat-utilities {
+  height: min-content;
+  border-top-style: hidden !important;
+  background-color: #f6ffff;
+
+}
+
+div.container {
+  height: 40px;
+  padding: 10px;
+  background-color: #E6FEFF;
+}
+
+div.container2 {
+  height: 40px;
+  padding: 10px;
+  background-color: #D9F6FF;
+
+}
+div.container3 {
+  height: 40px;
+  padding: 10px;
+  background-color: #D9F6FF;
+
+
+}
+
+.inputCard1 {
+  width: 100%;
+  height: 100%;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
+  outline: none;
+  background-color: #f6ffff;
+  opacity: 100;
+  text-align: center;
+}
+
+.inputCard2 {
+  width: 100%;
+  height: 100%;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
+  outline: none;
+  background-color: #E6FEFF;
+  text-align: center;
+
+}
+
+.inputCard3 {
+  width: 100%;
+  height: 100%;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
+  outline: none;
+  background-color: #D9F6FF;
+  text-align: center;
+
+}
+
+.deleteButton {
+  border-radius: 50%;
+  padding: 0.5em;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgb(86, 160, 209);
+  color: rgb(86, 160, 209);
+  position: relative;
+}
+
+.deleteButton:hover {
+  border: 2px solid rgb(86, 160, 209);
+  background-color: #eee;
+  color: #ffffff;
+}
+
+.deleteButton::before {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  width: 1px;
+  left: 6px;
+  top: 2.5px;
+  bottom: 2.5px;
+  transform: rotate(45deg);
+}
+
+.deleteButton::after {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  height: 1px;
+  top: 6px;
+  left: 2.5px;
+  right: 2.5px;
+  transform: rotate(45deg);
+}
+
+.addDataButton {
+  border-radius: 50%;
+  padding: 0.5em;
+  width: 5px;
+  height: 5px;
+  border: 2px solid rgb(86, 160, 209);
+  color: rgb(86, 160, 209);
+  position: relative;
+}
+
+.addDataButton:hover {
+  border: 2px solid rgb(86, 160, 209);
+  background-color: #eee;
+  color: #ffffff;
+}
+
+.addDataButton::before {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  width: 1px;
+  left: 6px;
+  top: 2.5px;
+  bottom: 2.5px;
+  transform: rotate(90deg);
+}
+
+.addDataButton::after {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  height: 1px;
+  top: 6px;
+  left: 2.5px;
+  right: 2.5px;
+  transform: rotate(90deg);
+}
+/*# sourceMappingURL=styles.css.map */
