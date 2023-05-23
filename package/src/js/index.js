@@ -30,6 +30,7 @@ let tableCreated = false;
   dataCard.id = 'dataCards';
   let row = document.createElement('div');
   row.className = 'row';
+  row.id=tableId+1;
   dataCard.appendChild(row);
   tableElement.appendChild(dataCard);
   addCard(tableId,dataCardsId);
@@ -50,10 +51,12 @@ let tableCreated = false;
 //ADDING CARDS TO TABLE
 function addCard(tableId, dataCardsId) {
   let dataCard = document.getElementById(tableId);
+  let row = document.getElementById(tableId+1);
+
   let card = document.createElement('div');
-  card.className = "card";
+  card.classList = ["card", dataCardsId];
   let header = document.createElement('div');
-  header.className = "header";
+  header.className =[ "header", dataCardsId];
   let inputCard1 = document.createElement('input');
   inputCard1.className = "inputCard1"
   let chatContainer = document.createElement('div');
@@ -209,7 +212,7 @@ function addCard(tableId, dataCardsId) {
 
   //ADDING DELETE CARD BUTOTN
   let deleteButton = document.createElement('button');
-  deleteButton.className = "deleteButton";
+  deleteButton.className = ["deleteButton", dataCardsId];
   header.style.position = "relative";
   deleteButton.style.position = "absolute"
   deleteButton.style.top = "5px"
@@ -222,7 +225,8 @@ function addCard(tableId, dataCardsId) {
   card.appendChild(container3);
   
   button.addEventListener('click', e => {
-    container3.remove(button);
+    let buttonParrent = e.target.parentNode;
+    console.log("target id" + e.target.parentNode);
     
     let container = document.createElement('div');
     container.className = "container";
@@ -241,29 +245,17 @@ function addCard(tableId, dataCardsId) {
     container3.className = "container2"
     let button = document.createElement('button');
     button.className = "addDataButton ";
-    container2.appendChild(button);
+    container2.appendChild(e.target);
     
-    card.appendChild(container);
-    card.appendChild(container2);
-    card.appendChild(container3);
+    buttonParrent.appendChild(container);
+    buttonParrent.appendChild(container2);
+    buttonParrent.appendChild(container3);
    })
-
-  function addNewField(){
-    
- 
-  }
-  let newDataButton = document.getElementsByClassName("addDataButton")
-  for(let i = 0; i < newDataButton.length; i++){
-    newDataButton[i].addEventListener('click', e => {
-      addNewField();
-    
-   });
-  }
 
   deleteButton.addEventListener('click', e => {
     card.remove();
   })
-  dataCard.appendChild(card);
+  row.appendChild(card);
   let id = new String("#" + dataCardsId.toString()); 
   console.log("id:"+id);
   $('#'+dataCardsId).colorPick({
