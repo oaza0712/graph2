@@ -51,6 +51,7 @@ let tableCreated = false;
 function addCard(tableId, dataCardsId) {
   let dataCard = document.getElementById(tableId);
   let row = document.getElementById(tableId+1);
+  let cell = document.createElement('div');
 
   let card = document.createElement('div');
   card.className = "card";
@@ -221,7 +222,9 @@ function addCard(tableId, dataCardsId) {
   card.appendChild(header);
   card.appendChild(container);
   card.appendChild(container2);
-  //card.appendChild(container3);
+  cell.appendChild(card);
+  row.appendChild(cell);
+
   
   button.addEventListener('click', e => {
     let buttonParrent = e.target.parentNode; 
@@ -252,7 +255,6 @@ function addCard(tableId, dataCardsId) {
   deleteButton.addEventListener('click', e => {
     card.remove();
   })
-  row.appendChild(card);
   let id = new String("#" + dataCardsId.toString()); 
   console.log("id:"+id);
   $('#'+dataCardsId).colorPick({
