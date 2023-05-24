@@ -226,6 +226,7 @@ function addCard(tableId, dataCardsId) {
   button.addEventListener('click', e => {
     let buttonParrent = e.target.parentNode; 
     let card = buttonParrent.parentNode  
+    e.target.parentNode.remove();
     let container = document.createElement('div');
     container.className = "container";
     let inputCard2 = document.createElement('input');
@@ -247,7 +248,6 @@ function addCard(tableId, dataCardsId) {
     
     card.appendChild(container);
     card.appendChild(container2);
-    card.appendChild(container3);
    })
 
   deleteButton.addEventListener('click', e => {
