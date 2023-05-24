@@ -38,7 +38,6 @@ let tableCreated = false;
   addButton.addEventListener('click', (event) => { 
     addCard(tableId,dataCardsId);
     dataCardsId++;
-    console.log(dataCardsId)
    });
   tableButtons.appendChild(addButton);
   tableButtons.appendChild(createButton);
@@ -54,9 +53,9 @@ function addCard(tableId, dataCardsId) {
   let row = document.getElementById(tableId+1);
 
   let card = document.createElement('div');
-  card.classList = ["card", dataCardsId];
+  card.className = "card";
   let header = document.createElement('div');
-  header.className =[ "header", dataCardsId];
+  header.className = "header";
   let inputCard1 = document.createElement('input');
   inputCard1.className = "inputCard1"
   let chatContainer = document.createElement('div');
@@ -212,7 +211,7 @@ function addCard(tableId, dataCardsId) {
 
   //ADDING DELETE CARD BUTOTN
   let deleteButton = document.createElement('button');
-  deleteButton.className = ["deleteButton", dataCardsId];
+  deleteButton.className = "deleteButton";
   header.style.position = "relative";
   deleteButton.style.position = "absolute"
   deleteButton.style.top = "5px"
@@ -225,9 +224,8 @@ function addCard(tableId, dataCardsId) {
   card.appendChild(container3);
   
   button.addEventListener('click', e => {
-    let buttonParrent = e.target.parentNode;
-    console.log("target id" + e.target.parentNode);
-    
+    let buttonParrent = e.target.parentNode; 
+    let card = buttonParrent.parentNode  
     let container = document.createElement('div');
     container.className = "container";
     let inputCard2 = document.createElement('input');
@@ -247,9 +245,9 @@ function addCard(tableId, dataCardsId) {
     button.className = "addDataButton ";
     container2.appendChild(e.target);
     
-    buttonParrent.appendChild(container);
-    buttonParrent.appendChild(container2);
-    buttonParrent.appendChild(container3);
+    card.appendChild(container);
+    card.appendChild(container2);
+    card.appendChild(container3);
    })
 
   deleteButton.addEventListener('click', e => {
