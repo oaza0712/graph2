@@ -1,17 +1,4 @@
-//import '../styles/main.scss';
-//import Chart from 'https://cdn.jsdelivr.net/npm/chart.js';
-
-//console.log(Chart);
-// import {Chart, registerables} from 'chart.js/dist/chart.js';
-// Chart.register(...registerables);
-
-let tableCreated = false;
-//create_input_table('table', 'tableButtons', 1);
-//collectButton();
-
-
-//ADDING BUTTONS TO PAGE
-
+console.log("hiiiS")
 let emojiCategories = [];
 function setEmojiCategories(wishedCategories) {
   emojiCategories = wishedCategories;
@@ -34,7 +21,7 @@ export function create_input_table(tableId, buttonId, dataCardsId) {
   addButton.setAttribute('role', "button");
   addButton.innerHTML = "+";
 
-  let createButton = graphButton('get', "Create bar Pictogram")
+  let createButton = graphButton('linePictogramButton', "Create line Pictogram")
 
   let dataCard = document.createElement('div');
   dataCard.className = 'dataCards';
@@ -205,6 +192,13 @@ function addCard(tableId, dataCardsId) {
   //MAKING CARDS FOR NUMBER AND TEXT INPUT
   let container = document.createElement('div');
   container.className = "container";
+
+  /*let datasetName = document.createElement('input');
+  datasetName.className = "container";
+  datasetName.setAttribute("placeHolder", "Input dataset name");
+
+  container.appendChild(datasetName);*/
+
   let inputCard2 = document.createElement('input');
   inputCard2.className = "inputCard2"
   inputCard2.setAttribute("placeHolder", "Input name");
@@ -280,7 +274,7 @@ function addCard(tableId, dataCardsId) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///COLLECTING DATA
-function getData() {
+function getDataSingular() {
   let table = document.getElementById('dataCards');
   let row = table.getElementsByClassName('row')[0];
   let cell = row.getElementsByClassName('cell');
@@ -296,7 +290,7 @@ function getData() {
   for (let i = 0; i < cell.length; i++) {
 
     let cards = cell[i].getElementsByClassName("card");
-
+    console.log("cards"+cards);
     let colors = cards[i].getElementsByClassName('picker');
     for (let i = 0; i < colors.length; i++) {
 
@@ -327,6 +321,10 @@ function getData() {
     for (let i = 0; i < number.length; i++) {
       if (number[i].value.length != 0) {
         numberArray[i] = number[i].value
+        if(i >0){
+          unicodeArray[i]=unicodeArray[0];
+          console.log(unicodeArray[i]);
+        }
       }
     }
   }
@@ -362,25 +360,27 @@ function createGraphCard(canvasId) {
   body.appendChild(chartCard);
 }
 function collectButton() {
-  console.log("In")
-  const button = document.getElementById("get");
+  const button = document.getElementById("linePictogramButton");
   button.addEventListener('click', (event) => {
-    let temp = getData();
-    console.log(temp);
-
-    let Bar2 = {
-      type: "bar",
+    let temp = getDataSingular();
+    //console.log(temp);
+   
+    let line = {
+      type: "line",
+      color: temp.colors,
+      border: temp.border,
       labels: temp.labels,
       values: temp.values,
       unicode: temp.unicode,
     };
-    createGraphCard('barPictogram')
-    let barPictogramReturn = KidChart(barPictogram, Bar2, 'barPictogram');
-    console.log(barPictogramReturn);
-    //createGraphCard('barTransition')
-    //KidChart(barTransition, Bar2, 'barTransition');
-    //createGraphCard('barChart')
-    //KidChart(barChart, Bar2, 'barChart');
+
+    createGraphCard('linePictogram')
+    let barPictogramReturn = KidChart(barPictogram, line, 'linePictogram');
+    createGraphCard('lineTransition')
+    KidChart(barTransition, line, 'lineTransition');
+    createGraphCard('lineChart')
+    KidChart(barChart, line, 'lineChart');
+
     document.getElementById("maxButton").addEventListener('click', () => {
       barPictogramReturn.options.scales.y.grid.color = (ctx) => {
         let max = barPictogramReturn.data.datasets[0].data[0];
@@ -441,10 +441,8 @@ let Line = {
     "pickedApples",
   ],
   unicode: [
-    "\uD83C\uDF4F",
-    "\uD83C\uDF4A",
-    "\uD83C\uDF4C",
-    "\uD83C\uDF53",
+    "\uD83C\uDF4F"
+    
   ],
 };
 //POZIV FUNKCIJE ZA RENDERING
@@ -496,8 +494,8 @@ function KidChart(typeOfChart, userData, canvasId) {
           label: userData.labelDataset[0],
           data: userData.values,
           fill: false,
-          backgroundColor: "rgba(93, 230, 0, 0.8)",
-          borderColor: "rgba(93, 230, 0, 0.8)",
+          backgroundColor: userData.color,
+          borderColor: userData.border,
         },
       ],
     };
@@ -507,7 +505,7 @@ function KidChart(typeOfChart, userData, canvasId) {
       labels: userData.labels,
       datasets: [
         {
-          label: userData.labelDataset[0],
+          label: "bla",
           data: userData.values,
           fill: false,
           backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -590,6 +588,7 @@ function KidChart(typeOfChart, userData, canvasId) {
         typeOfChart == "lineTransition" ||
         typeOfChart == "linePictogram"
       ) {
+        console.log(userData);
         let size = (y.getPixelForValue(0) - y.getPixelForValue(1)) / 2.5;
         for (let i = 0; i < userData.values.length; i++) {
           for (let j = 0; j < Math.floor(userData.values[i]); j++) {
@@ -656,7 +655,6 @@ function KidChart(typeOfChart, userData, canvasId) {
     document.getElementById(canvasId),
     config
   );
-  console.log("config2 ");
 
   return myKidChart;
 }
@@ -664,7 +662,3 @@ export default {
   create_input_table,
   collectButton
 };
-/*export default 
-{  create_input_table,
-  collectButton}
-;*/
