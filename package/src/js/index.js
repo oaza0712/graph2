@@ -11,7 +11,20 @@ let tableCreated = false;
 
 
 //ADDING BUTTONS TO PAGE
-  export function create_input_table(tableId, buttonId, dataCardsId) {
+
+let emojiCategories = [];
+function setEmojiCategories(wishedCategories) {
+  emojiCategories = wishedCategories;
+}
+let EmojisPerCategory;
+function setEmojisPerCategory(num) {
+  EmojisPerCategory = num;
+}
+setEmojisPerCategory(10);
+setEmojiCategories(['food-drink']);
+
+
+export function create_input_table(tableId, buttonId, dataCardsId) {
   let tableElement = document.getElementById(tableId);
 
   let tableButtons = document.getElementById(buttonId);
@@ -20,25 +33,23 @@ let tableCreated = false;
   addButton.className = "button-85";
   addButton.setAttribute('role', "button");
   addButton.innerHTML = "+";
-  let createButton = document.createElement('button');
-  createButton.id = "get";
-  createButton.className = "button-85";
-  createButton.setAttribute('role', "button");
-  createButton.innerHTML = "Create line Pictogram";
+
+  let createButton = graphButton('get', "Create bar Pictogram")
+
   let dataCard = document.createElement('div');
   dataCard.className = 'dataCards';
   dataCard.id = 'dataCards';
   let row = document.createElement('div');
   row.className = 'row';
-  row.id=tableId+1;
+  row.id = tableId + 1;
   dataCard.appendChild(row);
   tableElement.appendChild(dataCard);
-  addCard(tableId,dataCardsId);
+  addCard(tableId, dataCardsId);
   dataCardsId++;
-  addButton.addEventListener('click', (event) => { 
-    addCard(tableId,dataCardsId);
+  addButton.addEventListener('click', (event) => {
+    addCard(tableId, dataCardsId);
     dataCardsId++;
-   });
+  });
   tableButtons.appendChild(addButton);
   tableButtons.appendChild(createButton);
   return true;
@@ -46,12 +57,21 @@ let tableCreated = false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function graphButton(graphType, text) {
+  let createButton = document.createElement('button');
+  createButton.id = graphType;
+  createButton.className = "button-85";
+  createButton.setAttribute('role', "button");
+  createButton.innerHTML = text;
+  return createButton;
+}
 
 //ADDING CARDS TO TABLE
 function addCard(tableId, dataCardsId) {
   let dataCard = document.getElementById(tableId);
-  let row = document.getElementById(tableId+1);
+  let row = document.getElementById(tableId + 1);
   let cell = document.createElement('div');
+  cell.className = "cell";
 
   let card = document.createElement('div');
   card.className = "card";
@@ -95,8 +115,8 @@ function addCard(tableId, dataCardsId) {
   header.appendChild(chatContainer);
   //ADDING COLORPICKER
   let colorPicker = document.createElement('div');
-  colorPicker.className='picker'
-  colorPicker.id=dataCardsId;
+  colorPicker.className = 'picker'
+  colorPicker.id = dataCardsId;
   header.appendChild(colorPicker);
   //CHECKING IF POP UP IS IN VIEWPORT
   var isOutOfViewport = function (elem) {
@@ -117,17 +137,9 @@ function addCard(tableId, dataCardsId) {
       emojiSelectorCreate.style.bottom = '-710%'
     }
   });
+
+
   //LOADING EMOJIS
-  let emojiCategories = [];
-  function setEmojiCategories(wishedCategories) {
-    emojiCategories = wishedCategories;
-  }
-  let EmojisPerCategory;
-  function setEmojisPerCategory(num) {
-    EmojisPerCategory = num;
-  }
-  setEmojisPerCategory(10);
-  setEmojiCategories(['food-drink']);
   fetch('https://emoji-api.com/emojis?access_key=329dfe7d47ca9bf032e6959bd2692f5624520d19').then(res => res.json()).then(data => loadEmoji(data, emojiCategories, EmojisPerCategory));
   function loadEmoji(data, emojiCategories, EmojisPerCategory) {
     let counter = 0;
@@ -203,7 +215,7 @@ function addCard(tableId, dataCardsId) {
   inputCard3.className = "inputCard3"
   inputCard3.setAttribute("placeHolder", "Input number");
   container2.appendChild(inputCard3);
- 
+
   let container3 = document.createElement('div');
   container3.className = "container2"
   let button = document.createElement('button');
@@ -217,7 +229,7 @@ function addCard(tableId, dataCardsId) {
   deleteButton.style.position = "absolute"
   deleteButton.style.top = "5px"
   deleteButton.style.left = "5px"
-  
+
   header.appendChild(deleteButton);
   card.appendChild(header);
   card.appendChild(container);
@@ -225,10 +237,10 @@ function addCard(tableId, dataCardsId) {
   cell.appendChild(card);
   row.appendChild(cell);
 
-  
+
   button.addEventListener('click', e => {
-    let buttonParrent = e.target.parentNode; 
-    let card = buttonParrent.parentNode  
+    let buttonParrent = e.target.parentNode;
+    let card = buttonParrent.parentNode
     let container = document.createElement('div');
     container.className = "container";
     let inputCard2 = document.createElement('input');
@@ -241,62 +253,87 @@ function addCard(tableId, dataCardsId) {
     inputCard3.className = "inputCard3"
     inputCard3.setAttribute("placeHolder", "Input number");
     container2.appendChild(inputCard3);
-   
+
     let container3 = document.createElement('div');
     container3.className = "container2"
     let button = document.createElement('button');
     button.className = "addDataButton ";
     container2.appendChild(e.target);
-    
+
     card.appendChild(container);
     card.appendChild(container2);
-   })
+  })
 
   deleteButton.addEventListener('click', e => {
     card.remove();
   })
-  let id = new String("#" + dataCardsId.toString()); 
-  console.log("id:"+id);
-  $('#'+dataCardsId).colorPick({
-        'initialColor' : '#8e44ad',
-        'palette': ["#1abc9c", "#16a085", "#2ecc71", "#27ae60", "#3498db", "#2980b9", "#9b59b6", "#8e44ad", "#34495e", "#2c3e50", "#f1c40f", "#f39c12", "#e67e22", "#d35400", "#e74c3c", "#c0392b", "#ecf0f1"],
-        'onColorSelected': function() {
-            console.log("The user has selected the color: " + this.color)
-            this.element.css({'backgroundColor': this.color, 'color': this.color});
-        }
-    });
+  let id = new String("#" + dataCardsId.toString());
+  console.log("id:" + id);
+  $('#' + dataCardsId).colorPick({
+    'initialColor': '#8e44ad',
+    'palette': ["#1abc9c", "#16a085", "#2ecc71", "#27ae60", "#3498db", "#2980b9", "#9b59b6", "#8e44ad", "#34495e", "#2c3e50", "#f1c40f", "#f39c12", "#e67e22", "#d35400", "#e74c3c", "#c0392b", "#ecf0f1"],
+    'onColorSelected': function () {
+      console.log("The user has selected the color: " + this.color)
+      this.element.css({ 'backgroundColor': this.color, 'color': this.color });
+    }
+  });
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///COLLECTING DATA
 function getData() {
-  console.log("unutar getData");
   let table = document.getElementById('dataCards');
-  let unicode = table.getElementsByClassName('emoji-input');
-  let unicodeArray = [];
-  for (let i = 0; i < unicode.length; i++) {
-    if (unicode[i].textContent.trim != "") {
-      unicodeArray[i] = unicode[i].textContent
-      //console.log("unicodeArray" + unicodeArray[i]);
-    }
-  }
-  let name = table.getElementsByClassName('inputCard2');
-  let nameArray = [];
-  for (let i = 0; i < name.length; i++) {
-    if (name[i].value.length != 0) {
-      nameArray[i] = name[i].value
-      //console.log("unicodeArray" + unicodeArray[i]);
+  let row = table.getElementsByClassName('row')[0];
+  let cell = row.getElementsByClassName('cell');
 
-    }
-  }
-  let number = table.getElementsByClassName('inputCard3');
+
+  let colorArray = [];
+  let borderArray = [];
+  let unicodeArray = [];
+  let nameArray = [];
   let numberArray = [];
-  for (let i = 0; i < number.length; i++) {
-    if (number[i].value.length != 0) {
-      numberArray[i] = number[i].value
+
+
+  for (let i = 0; i < cell.length; i++) {
+
+    let cards = cell[i].getElementsByClassName("card");
+
+    let colors = cards[i].getElementsByClassName('picker');
+    for (let i = 0; i < colors.length; i++) {
+
+      let color = window.getComputedStyle(colors[i]).backgroundColor;
+      colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
+      borderArray[i] = color.replace(')', ', 0.8)').replace('rgb', 'rgba');
+    }
+
+    let unicode = cards[i].getElementsByClassName('emoji-input');
+    for (let i = 0; i < unicode.length; i++) {
+      if (unicode[i].textContent.trim != "") {
+        unicodeArray[i] = unicode[i].textContent
+        //console.log("unicodeArray" + unicode[i].textContent);
+        //console.log("unicodeArray" + unicodeArray[i]);
+      }
+    }
+
+    let name = cards[i].getElementsByClassName('inputCard2');
+    for (let i = 0; i < name.length; i++) {
+      if (name[i].value.length != 0) {
+        nameArray[i] = name[i].value
+        //console.log("unicodeArray" + unicodeArray[i]);
+
+      }
+    }
+
+    let number = cards[i].getElementsByClassName('inputCard3');
+    for (let i = 0; i < number.length; i++) {
+      if (number[i].value.length != 0) {
+        numberArray[i] = number[i].value
+      }
     }
   }
 
   return {
+    colors: colorArray,
+    border: borderArray,
     labels: nameArray,
     values: numberArray,
     unicode: unicodeArray
@@ -324,9 +361,7 @@ function createGraphCard(canvasId) {
   chartCard.appendChild(chartBox);
   body.appendChild(chartCard);
 }
-if(tableCreated){
-}
-   function collectButton() {
+function collectButton() {
   console.log("In")
   const button = document.getElementById("get");
   button.addEventListener('click', (event) => {
@@ -431,18 +466,8 @@ function KidChart(typeOfChart, userData, canvasId) {
       {
         label: "Number of fruit",
         data: userData.values,
-        backgroundColor: [
-          "rgba(93, 230, 0, 0.8)",
-          "rgba(233, 148, 0, 0.8)",
-          "rgba(255, 252, 0, 0.8)",
-          "rgba(255, 5, 5, 0.8)",
-        ],
-        borderColor: [
-          "rgba(93, 230, 0, 1)",
-          "rgba(233, 148, 0, 1)",
-          "rgba(255, 252, 0, 1)",
-          "rgba(255, 5, 5, 1)",
-        ],
+        backgroundColor:userData.color,
+        borderColor:userData.border,
         borderWidth: 1,
       },
     ],
@@ -457,12 +482,7 @@ function KidChart(typeOfChart, userData, canvasId) {
           label: "Type of fruit",
           data: userData.values,
           backgroundColor: "rgba(255, 255, 255, 0.1)",
-          borderColor: [
-            "rgba(93, 230, 0, 1)",
-            "rgba(233, 148, 0, 1)",
-            "rgba(255, 252, 0, 1)",
-            "rgba(255, 5, 5, 1)",
-          ],
+          borderColor: userData.color,
           borderWidth: 5,
         },
       ],
@@ -630,8 +650,8 @@ function KidChart(typeOfChart, userData, canvasId) {
     plugins: [plugin],
   };
   // render init block
-  console.log("canvas "+document.getElementById(canvasId));
- console.log("config " + config);
+  console.log("canvas " + document.getElementById(canvasId));
+  console.log("config " + config);
   const myKidChart = new Chart(
     document.getElementById(canvasId),
     config
