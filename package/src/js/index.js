@@ -66,6 +66,9 @@ function create_input_table(tableId, buttonId, dataCardsId) {
   addLineTransitionListener('lineTransitionButton')
   addLineChartListener('lineGraphButton')
 
+  addBarTransitionListener('barTransitionButton')
+
+
   return true;
 
 }
@@ -348,10 +351,6 @@ function getDataSingular() {
     for (let i = 0; i < number.length; i++) {
       if (number[i].value.length != 0) {
         numberArray[i] = number[i].value
-        if (i > 0) {
-          //unicodeArray[i] = unicodeArray[0];
-          //console.log(unicodeArray[i]);
-        }
       }
     }
 
@@ -360,6 +359,110 @@ function getDataSingular() {
       border: borderArray,
       labels: nameArray,
       values: numberArray,
+      unicode: unicodeArray
+    }
+
+    cardsArray[j] = oneCardData;
+
+  }
+
+  return cardsArray;
+}
+
+
+function getDataJoined() {
+  let table = document.getElementById('dataCards');
+  let row = table.getElementsByClassName('row')[0];
+  let cell = row.getElementsByClassName('cell');
+
+  let cardsArray = [];
+
+  for (let j = 0; j < cell.length; j++) {
+
+    let colorArray = [];
+    let borderArray = [];
+    let unicodeArray = [];
+    let nameArray = [];
+    let numberArray = [];
+
+    let cards = cell[j].getElementsByClassName("card");
+
+    let colors = cards[0].getElementsByClassName('picker');
+    //console.log("colors " + colors + " i "+ i);
+    for (let i = 0; i < colors.length; i++) {
+      let color = window.getComputedStyle(colors[i]).backgroundColor;
+      colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
+      borderArray[i] = color.replace(')', ', 0.8)').replace('rgb', 'rgba');
+    }
+
+    let unicode = cards[0].getElementsByClassName('emoji-input');
+
+    for (let i = 0; i < unicode.length; i++) {
+      if (unicode[i].textContent.trim != "") {
+        unicodeArray[0] = unicode[i].textContent
+      }
+
+    }
+
+    let name = cards[0].getElementsByClassName('inputCard2');
+    for (let i = 0; i < name.length; i++) {
+      if (name[i].value.length != 0) {
+        nameArray[i] = name[i].value
+      }
+    }
+
+    let number = cards[0].getElementsByClassName('inputCard3');
+    for (let i = 0; i < number.length; i++) {
+      if (number[i].value.length != 0) {
+        numberArray[i] = number[i].value
+
+      }
+    }
+
+    let newColorArray = [];
+    let newBorderArray = [];
+    let newUnicodeArray = [];
+    let newNameArray = [];
+    let newNumberArray = [];
+    let counter = new Map();
+
+    for (let i = 0; i < numberArray.length; i++) {
+
+      if (counter.get(numberArray[i].toString()) == null) {
+        counter.set(numberArray[i].toString(), 0);
+      }
+      counter.set(numberArray[i].toString(), counter.get(numberArray[i].toString())+1);
+    }
+
+    var keys = counter.keys();
+
+    var keyArray = Array.from(keys);
+
+    let k = 0;
+    keyArray.forEach(function (key) {
+      console.log(key);
+      newNameArray[k] = key;
+      k++;
+    });
+    
+     
+    var values = counter.values();
+
+    var valueArray = Array.from(values);
+
+    let l = 0;
+    valueArray.forEach(function (value) {
+      console.log(value);
+      newNumberArray[l] = value;
+      l++;
+    });
+    
+
+    let oneCardData = {
+      colors: colorArray,
+      border: borderArray,
+      labels: newNameArray,
+      values: newNumberArray,
       unicode: unicodeArray
     }
 
@@ -463,13 +566,13 @@ function addLineTransitionListener(buttonId) {
         unicode: temp[i].unicode,
       };
 
-    let graph;
+      let graph;
 
-    //console.log("in: lineTransitionButton")
-    createGraphCard('lineTransition' + i.toString())
-    graph = KidChart("lineTransition", line, 'lineTransition'+ i.toString());
+      //console.log("in: lineTransitionButton")
+      createGraphCard('lineTransition' + i.toString())
+      graph = KidChart("lineTransition", line, 'lineTransition' + i.toString());
 
-    graphButtons(graph)
+      graphButtons(graph)
     }
   });
 }
@@ -492,16 +595,48 @@ function addLineChartListener(buttonId) {
         unicode: temp[i].unicode,
       };
 
-    let graph;
+      let graph;
 
-    //console.log("in: lineGraphButton")
-    createGraphCard('lineChart'+ i.toString())
-    graph = KidChart("lineChart", line, 'lineChart'+ i.toString());
+      //console.log("in: lineGraphButton")
+      createGraphCard('lineChart' + i.toString())
+      graph = KidChart("lineChart", line, 'lineChart' + i.toString());
 
-    graphButtons(graph)
+      graphButtons(graph)
 
-  }});
+    }
+  });
 }
+
+function addBarTransitionListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataJoined();
+    for (let i = 0; i < temp.length; i++) {
+
+
+      let line = {
+        type: "bar",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
+
+      let graph;
+
+      createGraphCard("barTransition " + i.toString())
+      graph = KidChart('barTransition', line, "barTransition " + i.toString());
+
+      graphButtons(graph)
+
+    }
+
+
+
+  });
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GRAPH RENDERING FUNCTION
 function KidChart(typeOfChart, userData, canvasId) {
@@ -636,23 +771,23 @@ function KidChart(typeOfChart, userData, canvasId) {
         typeOfChart == "lineTransition" ||
         typeOfChart == "linePictogram"
       ) {
-       
 
-        let size = (y.getPixelForValue(0) - y.getPixelForValue(1))/1.7;
+
+        let size = (y.getPixelForValue(0) - y.getPixelForValue(1)) / 1.7;
         for (let i = 0; i < userData.values.length; i++) {
           for (let j = 0; j < Math.floor(userData.values[i]); j++) {
             let between =
               y.getPixelForValue(0) -
               y.getPixelForValue(userData.values[i]);
             ctx.font = `${size}px Arial`;
-          
-              ctx.fillText(
-                userData.unicode[0],
-                x.getPixelForValue(i) - size / 2,
-                y.getPixelForValue(j + 1) + size * 0.5,
-                size
-              );
-            
+
+            ctx.fillText(
+              userData.unicode[0],
+              x.getPixelForValue(i) - size / 2,
+              y.getPixelForValue(j + 1) + size * 0.5,
+              size
+            );
+
           }
         }
       }
@@ -664,8 +799,9 @@ function KidChart(typeOfChart, userData, canvasId) {
   for (let i = 0; i < userData.values.length; i++) {
     if (max < userData.values[i]) {
       max = userData.values[i];
-    }}
-    console.log("max " + max)
+    }
+  }
+  console.log("max " + max)
 
   var display = false;
   if (typeOfChart == "pieChart") {
@@ -684,20 +820,20 @@ function KidChart(typeOfChart, userData, canvasId) {
       },
       responsive: true,
       scales: {
-        x:{
+        x: {
           ticks: {
-            padding:20 ,
+            padding: 20,
             color: "#718096",
           },
         },
         y: {
           ticks: {
-            padding:20 ,
+            padding: 20,
             color: "#718096",
           },
           beginAtZero: true,
-          min: 0, 
-          max: parseFloat(max)+1,
+          min: 0,
+          max: parseFloat(max) + 1,
           drawBorder: true,
           grid: {
             color: (ctx) => {
