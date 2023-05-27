@@ -1,3 +1,4 @@
+
 let emojiCategories = [];
 function setEmojiCategories(wishedCategories) {
   emojiCategories = wishedCategories;
@@ -19,9 +20,18 @@ function create_input_table(tableId, buttonId, dataCardsId) {
   addButton.setAttribute('role', "button");
   addButton.innerHTML = "+";
 
-  let createButton = graphButton('linePictogramButton', "Create line pictogram")
+  let createLinePictogramButton = graphButton('linePictogramButton', "Create line pictogram")
   let createLineTransButton = graphButton('lineTransitionButton', "Create line transition graph")
   let createLineGraphButton = graphButton('lineGraphButton', "Create line graph")
+
+  let createBarPictogramButton = graphButton('barPictogramButton', "Create bar pictogram")
+  let createBarTransButton = graphButton('barTransitionButton', "Create bar transition graph")
+  let createBarGraphButton = graphButton('barGraphButton', "Create bar graph")
+
+
+  let createPiePictogramButton = graphButton('piePictogramButton', "Create pie pictogram")
+  let createPieTransButton = graphButton('pieTransitionButton', "Create pie transition graph")
+  let createPieGraphButton = graphButton('pieGraphButton', "Create pie graph")
 
   let dataCard = document.createElement('div');
   dataCard.className = 'dataCards';
@@ -39,10 +49,18 @@ function create_input_table(tableId, buttonId, dataCardsId) {
   });
 
   tableButtons.appendChild(addButton);
-  tableButtons.appendChild(createButton);
+
+  tableButtons.appendChild(createLinePictogramButton);
   tableButtons.appendChild(createLineTransButton);
   tableButtons.appendChild(createLineGraphButton);
 
+  tableButtons.appendChild(createBarPictogramButton);
+  tableButtons.appendChild(createBarTransButton);
+  tableButtons.appendChild(createBarGraphButton);
+
+  tableButtons.appendChild(createPiePictogramButton);
+  tableButtons.appendChild(createPieTransButton);
+  tableButtons.appendChild(createPieGraphButton);
 
   addLinePictogramListener('linePictogramButton')
   addLineTransitionListener('lineTransitionButton')
@@ -269,14 +287,16 @@ function addCard(tableId, dataCardsId) {
 
   deleteButton.addEventListener('click', e => {
     card.remove();
+    cell.remove();
   })
+
   let id = new String("#" + dataCardsId.toString());
-  console.log("id:" + id);
+  //console.log("id:" + id);
   $('#' + dataCardsId).colorPick({
     'initialColor': '#8e44ad',
     'palette': ["#1abc9c", "#16a085", "#2ecc71", "#27ae60", "#3498db", "#2980b9", "#9b59b6", "#8e44ad", "#34495e", "#2c3e50", "#f1c40f", "#f39c12", "#e67e22", "#d35400", "#e74c3c", "#c0392b", "#ecf0f1"],
     'onColorSelected': function () {
-      console.log("The user has selected the color: " + this.color)
+      //console.log("The user has selected the color: " + this.color)
       this.element.css({ 'backgroundColor': this.color, 'color': this.color });
     }
   });
@@ -288,63 +308,66 @@ function getDataSingular() {
   let row = table.getElementsByClassName('row')[0];
   let cell = row.getElementsByClassName('cell');
 
+  let cardsArray = [];
 
-  let colorArray = [];
-  let borderArray = [];
-  let unicodeArray = [];
-  let nameArray = [];
-  let numberArray = [];
+  for (let j = 0; j < cell.length; j++) {
 
+    let colorArray = [];
+    let borderArray = [];
+    let unicodeArray = [];
+    let nameArray = [];
+    let numberArray = [];
 
-  for (let i = 0; i < cell.length; i++) {
+    let cards = cell[j].getElementsByClassName("card");
 
-    let cards = cell[i].getElementsByClassName("card");
-    let colors = cards[i].getElementsByClassName('picker');
-
+    let colors = cards[0].getElementsByClassName('picker');
+    //console.log("colors " + colors + " i "+ i);
     for (let i = 0; i < colors.length; i++) {
-
       let color = window.getComputedStyle(colors[i]).backgroundColor;
       colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
       borderArray[i] = color.replace(')', ', 0.8)').replace('rgb', 'rgba');
     }
 
-    let unicode = cards[i].getElementsByClassName('emoji-input');
+    let unicode = cards[0].getElementsByClassName('emoji-input');
+
     for (let i = 0; i < unicode.length; i++) {
       if (unicode[i].textContent.trim != "") {
-        unicodeArray[i] = unicode[i].textContent
-        //console.log("unicodeArray" + unicode[i].textContent);
-        //console.log("unicodeArray" + unicodeArray[i]);
+        unicodeArray[0] = unicode[i].textContent
       }
+
     }
 
-    let name = cards[i].getElementsByClassName('inputCard2');
+    let name = cards[0].getElementsByClassName('inputCard2');
     for (let i = 0; i < name.length; i++) {
       if (name[i].value.length != 0) {
         nameArray[i] = name[i].value
-        //console.log("unicodeArray" + unicodeArray[i]);
-
       }
     }
 
-    let number = cards[i].getElementsByClassName('inputCard3');
+    let number = cards[0].getElementsByClassName('inputCard3');
     for (let i = 0; i < number.length; i++) {
       if (number[i].value.length != 0) {
         numberArray[i] = number[i].value
         if (i > 0) {
-          unicodeArray[i] = unicodeArray[0];
-          console.log(unicodeArray[i]);
+          //unicodeArray[i] = unicodeArray[0];
+          //console.log(unicodeArray[i]);
         }
       }
     }
+
+    let oneCardData = {
+      colors: colorArray,
+      border: borderArray,
+      labels: nameArray,
+      values: numberArray,
+      unicode: unicodeArray
+    }
+
+    cardsArray[j] = oneCardData;
+
   }
 
-  return {
-    colors: colorArray,
-    border: borderArray,
-    labels: nameArray,
-    values: numberArray,
-    unicode: unicodeArray
-  }
+  return cardsArray;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CREATING GRAPH
@@ -392,25 +415,31 @@ function addLinePictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
-    //console.log(temp);
-    console.log("butto id:" + buttonId)
+    for (let i = 0; i < temp.length; i++) {
+      console.log(i);
+      console.log(temp[i]);
 
-    let line = {
-      type: "line",
-      color: temp.colors,
-      border: temp.border,
-      labels: temp.labels,
-      values: temp.values,
-      unicode: temp.unicode,
-    };
-    let graph;
+      let line = {
+        type: "line",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
 
-    console.log("in: linePictogramButton")
+      let graph;
 
-    createGraphCard('linePictogram')
-    graph = KidChart('linePictogram', line, 'linePictogram');
+      console.log("in: linePictogramButton " + [i])
 
-    graphButtons(graph)
+      createGraphCard("linePictogram " + i.toString())
+      graph = KidChart('linePictogram', line, "linePictogram " + i.toString());
+
+      graphButtons(graph)
+
+    }
+
+
 
   });
 }
@@ -421,7 +450,7 @@ function addLineTransitionListener(buttonId) {
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
     //console.log(temp);
-    console.log("butto id:" + buttonId)
+    //console.log("butto id:" + buttonId)
 
     let line = {
       type: "line",
@@ -433,10 +462,9 @@ function addLineTransitionListener(buttonId) {
     };
     let graph;
 
-    console.log("in: lineTransitionButton")
+    //console.log("in: lineTransitionButton")
     createGraphCard('lineTransition')
     graph = KidChart("lineTransition", line, 'lineTransition');
-
 
     graphButtons(graph)
 
@@ -447,7 +475,7 @@ function addLineChartListener(buttonId) {
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
     //console.log(temp);
-    console.log("butto id:" + buttonId)
+    //console.log("butto id:" + buttonId)
 
     let line = {
       type: "line",
@@ -459,10 +487,9 @@ function addLineChartListener(buttonId) {
     };
     let graph;
 
-    console.log("in: lineGraphButton")
+    //console.log("in: lineGraphButton")
     createGraphCard('lineChart')
     graph = KidChart("lineChart", line, 'lineChart');
-
 
     graphButtons(graph)
 
@@ -602,8 +629,7 @@ function KidChart(typeOfChart, userData, canvasId) {
         typeOfChart == "lineTransition" ||
         typeOfChart == "linePictogram"
       ) {
-        console.log(userData);
-        console.log("TRANSITION")
+       
 
         let size = (y.getPixelForValue(0) - y.getPixelForValue(1)) / 2.5;
         for (let i = 0; i < userData.values.length; i++) {
@@ -616,7 +642,7 @@ function KidChart(typeOfChart, userData, canvasId) {
               ctx.fillText(
                 userData.unicode[0],
                 x.getPixelForValue(i) - size / 2,
-                y.getPixelForValue(j + 1.5) + size,
+                y.getPixelForValue(j+1)+size,
                 size
               );
             } else {
@@ -632,9 +658,17 @@ function KidChart(typeOfChart, userData, canvasId) {
       }
     },
   };
+
+
+  let max = userData.values[0];
+  for (let i = 0; i < userData.values.length; i++) {
+    if (max < userData.values[0]) {
+      max = userData.values[i];
+    }}
+   console.log("max " + max)
+
   var display = false;
-  if (typeOfChart == "pieChart" /*|| typeOfChart == "lineChart"*/) {
-    console.log("u diplayu")
+  if (typeOfChart == "pieChart") {
     display = true;
   }
   // config
@@ -642,6 +676,7 @@ function KidChart(typeOfChart, userData, canvasId) {
     type: userData.type,
     data,
     options: {
+      responsive: true,
       plugins: {
         legend: {
           display: display,
@@ -649,11 +684,20 @@ function KidChart(typeOfChart, userData, canvasId) {
       },
       responsive: true,
       scales: {
+        x:{
+          ticks: {
+            padding:20 ,
+            color: "#718096",
+          },
+        },
         y: {
           ticks: {
+            padding:20 ,
             color: "#718096",
           },
           beginAtZero: true,
+          min: 0, 
+          max: parseFloat(max)+1,
           drawBorder: true,
           grid: {
             color: (ctx) => {
@@ -667,8 +711,9 @@ function KidChart(typeOfChart, userData, canvasId) {
   };
   // render init block
   console.log("canvas " + document.getElementById(canvasId).id);
+  let canvas = document.getElementById(canvasId)
   const myKidChart = new Chart(
-    document.getElementById(canvasId),
+    canvas.getContext('2d'),
     config
   );
 

@@ -225,7 +225,8 @@ body {
 }
 
 .chartBox {
-  width: 700px;
+  width: 900px;
+  
   padding: 20px;
   border-radius: 20px;
   border: solid 3px rgb(54, 162, 235);
