@@ -638,21 +638,14 @@ function KidChart(typeOfChart, userData, canvasId) {
               y.getPixelForValue(0) -
               y.getPixelForValue(userData.values[i]);
             ctx.font = `${size}px Arial`;
-            if (j == 0) {
-              ctx.fillText(
-                userData.unicode[0],
-                x.getPixelForValue(i) - size / 2,
-                y.getPixelForValue(j+1)+size,
-                size
-              );
-            } else {
+          
               ctx.fillText(
                 userData.unicode[0],
                 x.getPixelForValue(i) - size / 2,
                 y.getPixelForValue(j + 1) + size * 0.5,
                 size
               );
-            }
+            
           }
         }
       }
