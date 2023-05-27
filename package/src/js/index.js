@@ -416,8 +416,7 @@ function addLinePictogramListener(buttonId) {
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
     for (let i = 0; i < temp.length; i++) {
-      console.log(i);
-      console.log(temp[i]);
+
 
       let line = {
         type: "line",
@@ -452,22 +451,26 @@ function addLineTransitionListener(buttonId) {
     //console.log(temp);
     //console.log("butto id:" + buttonId)
 
-    let line = {
-      type: "line",
-      color: temp.colors,
-      border: temp.border,
-      labels: temp.labels,
-      values: temp.values,
-      unicode: temp.unicode,
-    };
+    for (let i = 0; i < temp.length; i++) {
+
+
+      let line = {
+        type: "line",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
+
     let graph;
 
     //console.log("in: lineTransitionButton")
-    createGraphCard('lineTransition')
-    graph = KidChart("lineTransition", line, 'lineTransition');
+    createGraphCard('lineTransition' + i.toString())
+    graph = KidChart("lineTransition", line, 'lineTransition'+ i.toString());
 
     graphButtons(graph)
-
+    }
   });
 }
 function addLineChartListener(buttonId) {
@@ -477,23 +480,27 @@ function addLineChartListener(buttonId) {
     //console.log(temp);
     //console.log("butto id:" + buttonId)
 
-    let line = {
-      type: "line",
-      color: temp.colors,
-      border: temp.border,
-      labels: temp.labels,
-      values: temp.values,
-      unicode: temp.unicode,
-    };
+    for (let i = 0; i < temp.length; i++) {
+
+
+      let line = {
+        type: "line",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
+
     let graph;
 
     //console.log("in: lineGraphButton")
-    createGraphCard('lineChart')
-    graph = KidChart("lineChart", line, 'lineChart');
+    createGraphCard('lineChart'+ i.toString())
+    graph = KidChart("lineChart", line, 'lineChart'+ i.toString());
 
     graphButtons(graph)
 
-  });
+  }});
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GRAPH RENDERING FUNCTION
@@ -631,7 +638,7 @@ function KidChart(typeOfChart, userData, canvasId) {
       ) {
        
 
-        let size = (y.getPixelForValue(0) - y.getPixelForValue(1)) / 2.5;
+        let size = (y.getPixelForValue(0) - y.getPixelForValue(1))/1.7;
         for (let i = 0; i < userData.values.length; i++) {
           for (let j = 0; j < Math.floor(userData.values[i]); j++) {
             let between =
@@ -655,10 +662,10 @@ function KidChart(typeOfChart, userData, canvasId) {
 
   let max = userData.values[0];
   for (let i = 0; i < userData.values.length; i++) {
-    if (max < userData.values[0]) {
+    if (max < userData.values[i]) {
       max = userData.values[i];
     }}
-   console.log("max " + max)
+    console.log("max " + max)
 
   var display = false;
   if (typeOfChart == "pieChart") {
