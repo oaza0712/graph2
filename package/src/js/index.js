@@ -1,4 +1,3 @@
-console.log("hiiiS")
 let emojiCategories = [];
 function setEmojiCategories(wishedCategories) {
   emojiCategories = wishedCategories;
@@ -10,8 +9,7 @@ function setEmojisPerCategory(num) {
 setEmojisPerCategory(10);
 setEmojiCategories(['food-drink']);
 
-
-export function create_input_table(tableId, buttonId, dataCardsId) {
+function create_input_table(tableId, buttonId, dataCardsId) {
   let tableElement = document.getElementById(tableId);
 
   let tableButtons = document.getElementById(buttonId);
@@ -21,7 +19,9 @@ export function create_input_table(tableId, buttonId, dataCardsId) {
   addButton.setAttribute('role', "button");
   addButton.innerHTML = "+";
 
-  let createButton = graphButton('linePictogramButton', "Create line Pictogram")
+  let createButton = graphButton('linePictogramButton', "Create line pictogram")
+  let createLineTransButton = graphButton('lineTransitionButton', "Create line transition graph")
+  let createLineGraphButton = graphButton('lineGraphButton', "Create line graph")
 
   let dataCard = document.createElement('div');
   dataCard.className = 'dataCards';
@@ -37,8 +37,17 @@ export function create_input_table(tableId, buttonId, dataCardsId) {
     addCard(tableId, dataCardsId);
     dataCardsId++;
   });
+
   tableButtons.appendChild(addButton);
   tableButtons.appendChild(createButton);
+  tableButtons.appendChild(createLineTransButton);
+  tableButtons.appendChild(createLineGraphButton);
+
+
+  addLinePictogramListener('linePictogramButton')
+  addLineTransitionListener('lineTransitionButton')
+  addLineChartListener('lineGraphButton')
+
   return true;
 
 }
@@ -290,8 +299,8 @@ function getDataSingular() {
   for (let i = 0; i < cell.length; i++) {
 
     let cards = cell[i].getElementsByClassName("card");
-    console.log("cards"+cards);
     let colors = cards[i].getElementsByClassName('picker');
+
     for (let i = 0; i < colors.length; i++) {
 
       let color = window.getComputedStyle(colors[i]).backgroundColor;
@@ -321,8 +330,8 @@ function getDataSingular() {
     for (let i = 0; i < number.length; i++) {
       if (number[i].value.length != 0) {
         numberArray[i] = number[i].value
-        if(i >0){
-          unicodeArray[i]=unicodeArray[0];
+        if (i > 0) {
+          unicodeArray[i] = unicodeArray[0];
           console.log(unicodeArray[i]);
         }
       }
@@ -359,12 +368,33 @@ function createGraphCard(canvasId) {
   chartCard.appendChild(chartBox);
   body.appendChild(chartCard);
 }
-function collectButton() {
-  const button = document.getElementById("linePictogramButton");
+
+function graphButtons(graph) {
+  document.getElementById("maxButton").addEventListener('click', () => {
+    graph.options.scales.y.grid.color = (ctx) => {
+      let max = graph.data.datasets[0].data[0];
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+        if (max < graph.data.datasets[0].data[i]) {
+          max = graph.data.datasets[0].data[i];
+        }
+      }
+      if (ctx.tick.value == max) {
+        return "red"
+      } else {
+        return 'grey'
+      }
+    };
+    graph.update();
+  })
+}
+
+function addLinePictogramListener(buttonId) {
+  const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
     //console.log(temp);
-   
+    console.log("butto id:" + buttonId)
+
     let line = {
       type: "line",
       color: temp.colors,
@@ -373,89 +403,73 @@ function collectButton() {
       values: temp.values,
       unicode: temp.unicode,
     };
+    let graph;
+
+    console.log("in: linePictogramButton")
 
     createGraphCard('linePictogram')
-    let barPictogramReturn = KidChart(barPictogram, line, 'linePictogram');
-    createGraphCard('lineTransition')
-    KidChart(barTransition, line, 'lineTransition');
-    createGraphCard('lineChart')
-    KidChart(barChart, line, 'lineChart');
+    graph = KidChart('linePictogram', line, 'linePictogram');
 
-    document.getElementById("maxButton").addEventListener('click', () => {
-      barPictogramReturn.options.scales.y.grid.color = (ctx) => {
-        let max = barPictogramReturn.data.datasets[0].data[0];
-        for (let i = 0; i < barPictogramReturn.data.datasets[0].data.length; i++) {
-          if (max < barPictogramReturn.data.datasets[0].data[i]) {
-            max = barPictogramReturn.data.datasets[0].data[i];
-          }
-        }
-        if (ctx.tick.value == max) {
-          return "red"
-        } else {
-          return 'grey'
-        }
-      };
-      barPictogramReturn.update();
-    })
+    graphButtons(graph)
+
+  });
+}
+
+
+function addLineTransitionListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataSingular();
+    //console.log(temp);
+    console.log("butto id:" + buttonId)
+
+    let line = {
+      type: "line",
+      color: temp.colors,
+      border: temp.border,
+      labels: temp.labels,
+      values: temp.values,
+      unicode: temp.unicode,
+    };
+    let graph;
+
+    console.log("in: lineTransitionButton")
+    createGraphCard('lineTransition')
+    graph = KidChart("lineTransition", line, 'lineTransition');
+
+
+    graphButtons(graph)
+
+  });
+}
+function addLineChartListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataSingular();
+    //console.log(temp);
+    console.log("butto id:" + buttonId)
+
+    let line = {
+      type: "line",
+      color: temp.colors,
+      border: temp.border,
+      labels: temp.labels,
+      values: temp.values,
+      unicode: temp.unicode,
+    };
+    let graph;
+
+    console.log("in: lineGraphButton")
+    createGraphCard('lineChart')
+    graph = KidChart("lineChart", line, 'lineChart');
+
+
+    graphButtons(graph)
+
   });
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//DIJAGRAMI
-//DEFINIRANJE TIPOVA DIJAGRAMA
-let piePictogram = "piePictogram";
-let pieTransition = "pieTransition";
-let pieChart = "pieChart";
-let barPictogram = "barPictogram";
-let barTransition = "barTransition";
-let barChart = "barChart";
-let linePictogram = "linePictogram";
-let lineTransition = "lineTransition";
-let lineChart = "lineChart";
-let Bar = {
-  type: "bar",
-  labels: ["Apples", "Oranges", "Bananas", "Strawberrys"],
-  values: [1, 12.86, 3, 4],
-  unicode: [
-    "\uD83C\uDF4F",
-    "\uD83C\uDF4A",
-    "\uD83C\uDF4C",
-    "\uD83C\uDF53",
-  ],
-};
-let Pie = {
-  type: "pie",
-  labels: ["Apples", "Oranges", "Bananas", "Strawberrys"],
-  values: [1, 22, 3.78, 3.5],
-  unicode: [
-    "\uD83C\uDF4F",
-    "\uD83C\uDF4A",
-    "\uD83C\uDF4C",
-    "\uD83C\uDF53",
-  ],
-};
-let Line = {
-  type: "line",
-  labels: ["first day", "second day", "third day", "fourth day"],
-  values: [1, 2.8, 5, 7],
-  labelDataset: [
-    "pickedApples",
-  ],
-  unicode: [
-    "\uD83C\uDF4F"
-    
-  ],
-};
-//POZIV FUNKCIJE ZA RENDERING
-/*KidChart(piePictogram, Pie, "piePictogram");
-KidChart(pieTransition, Pie, "pieTransition");
-KidChart(pieChart, Pie, "pieChart");
-KidChart(linePictogram, Line, "linePictogram");
-KidChart(lineTransition, Line, "lineTransition");
-KidChart(lineChart, Line, "lineChart");
- KidChart(barPictogram, Bar2);
- KidChart(barTransition, Bar2);
- KidChart(barChart, Bar2);*/
-// RENDERING FUNCTION
+// GRAPH RENDERING FUNCTION
 function KidChart(typeOfChart, userData, canvasId) {
   //DEFAULT DATA VALUES
   var data = {
@@ -464,8 +478,8 @@ function KidChart(typeOfChart, userData, canvasId) {
       {
         label: "Number of fruit",
         data: userData.values,
-        backgroundColor:userData.color,
-        borderColor:userData.border,
+        backgroundColor: userData.color,
+        borderColor: userData.border,
         borderWidth: 1,
       },
     ],
@@ -491,7 +505,7 @@ function KidChart(typeOfChart, userData, canvasId) {
       labels: userData.labels,
       datasets: [
         {
-          label: userData.labelDataset[0],
+          //label: userData.labelDataset,
           data: userData.values,
           fill: false,
           backgroundColor: userData.color,
@@ -589,6 +603,8 @@ function KidChart(typeOfChart, userData, canvasId) {
         typeOfChart == "linePictogram"
       ) {
         console.log(userData);
+        console.log("TRANSITION")
+
         let size = (y.getPixelForValue(0) - y.getPixelForValue(1)) / 2.5;
         for (let i = 0; i < userData.values.length; i++) {
           for (let j = 0; j < Math.floor(userData.values[i]); j++) {
@@ -617,7 +633,8 @@ function KidChart(typeOfChart, userData, canvasId) {
     },
   };
   var display = false;
-  if (typeOfChart == "pieChart" || typeOfChart == "lineChart") {
+  if (typeOfChart == "pieChart" /*|| typeOfChart == "lineChart"*/) {
+    console.log("u diplayu")
     display = true;
   }
   // config
@@ -649,8 +666,7 @@ function KidChart(typeOfChart, userData, canvasId) {
     plugins: [plugin],
   };
   // render init block
-  console.log("canvas " + document.getElementById(canvasId));
-  console.log("config " + config);
+  console.log("canvas " + document.getElementById(canvasId).id);
   const myKidChart = new Chart(
     document.getElementById(canvasId),
     config
@@ -659,6 +675,6 @@ function KidChart(typeOfChart, userData, canvasId) {
   return myKidChart;
 }
 export default {
-  create_input_table,
-  collectButton
+  create_input_table
+  //collectButton
 };
