@@ -218,7 +218,7 @@ body {
 .chartCard {
   width: 100vw;
   height: calc(100vh - 40px);
-  background: rgba(200, 229, 248, 0.2);
+  background: rgba(229, 244, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -237,6 +237,15 @@ td {
   height: 50px;
   border: 4px solid rgb(99, 196, 215);
   box-shadow: 10px 10px 5px lightblue;
+}
+
+.tableButtonDiv{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+
 }
 
 .buttonDiv{
@@ -276,62 +285,6 @@ td {
   display: flex;
 }
 
-.button-85 {
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0.6em 2em;
-  border: none;
-  outline: none;
-  color: rgb(99, 196, 215);
-  background: #ffffff;
-  cursor: pointer;
-  position: relative;
-  z-index: 0;
-  border-radius: 100%;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.button-85:before {
-  content: "";
-  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  background-size: 200%;
-  z-index: -1;
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  animation: glowing-button-85 20s linear infinite;
-  transition: opacity 0.3s ease-in-out;
-  border-radius: 5%;
-}
-
-@keyframes glowing-button-85 {
-  0% {
-    background-position: 0 0;
-  }
-  50% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: 0 0;
-  }
-}
-.button-85:after {
-  z-index: -1;
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
-  left: 0;
-  top: 0;
-  border-radius: 5%;
-}
 
 div.dataCards {
   max-width: 100%;
@@ -364,6 +317,9 @@ div.header {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-left: 2px solid rgb(86, 160, 209);
+  border-right: 2px solid rgb(86, 160, 209);
+  border-top: 2px solid  rgb(86, 160, 209);
 }
 
 div.chat-utilities {
@@ -376,12 +332,17 @@ div.container {
   height: 40px;
   padding: 10px;
   background-color: #E6FEFF;
+  border-left: 2px solid rgb(86, 160, 209);
+  border-right: 2px solid rgb(86, 160, 209);
+  border-top: 2px solid  rgb(86, 160, 209);
 }
 
 div.container2 {
   height: 40px;
   padding: 10px;
   background-color: #D9F6FF;
+  border-left: 2px solid rgb(86, 160, 209);
+  border-right: 2px solid rgb(86, 160, 209);
 }
 
 div.container3 {

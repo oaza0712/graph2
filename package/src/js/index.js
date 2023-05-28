@@ -14,9 +14,10 @@ function create_input_table(tableId, buttonId, dataCardsId) {
   let tableElement = document.getElementById(tableId);
 
   let tableButtons = document.getElementById(buttonId);
+  tableButtons.className = "tableButtonDiv"
   let addButton = document.createElement('button');
   addButton.id = "add";
-  addButton.className = "button-85";
+  addButton.className = "button-2";
   addButton.setAttribute('role', "button");
   addButton.innerHTML = "+";
 
@@ -81,7 +82,7 @@ function create_input_table(tableId, buttonId, dataCardsId) {
 function graphButton(graphType, text) {
   let createButton = document.createElement('button');
   createButton.id = graphType;
-  createButton.className = "button-85";
+  createButton.className = "button-2";
   createButton.setAttribute('role', "button");
   createButton.innerHTML = text;
   return createButton;
@@ -122,6 +123,9 @@ function addCard(tableId, dataCardsId) {
   emojiListCreate.id = 'emojiList';
   let emojiSelectorIconCreate = document.createElement('li');
   emojiSelectorIconCreate.id = "emojiSelectorIcon";
+  emojiSelectorIconCreate.className = "emojiSelectorIcon";
+
+  
   let img = document.createElement('img');
   img.setAttribute('src', 'https://upload.wikimedia.org/wikipedia/commons/9/90/Twemoji_1f600.svg');
   emojiSelectorIconCreate.appendChild(img);
@@ -152,6 +156,9 @@ function addCard(tableId, dataCardsId) {
     return out;
   };
   emojiSelectorIconCreate.addEventListener('click', () => {
+    /*let emojiPickers = document.getElementsByClassName("emojiSelectorIcon")
+    for(let i = 0; i < emojiPickers.length;i++){}
+   */
     emojiSelectorCreate.classList.toggle('active');
     var isOut = isOutOfViewport(emojiSelectorCreate);
     if (isOut.any) {
@@ -237,11 +244,13 @@ function addCard(tableId, dataCardsId) {
   inputCard3.className = "inputCard3"
   inputCard3.setAttribute("placeHolder", "Input number");
   container2.appendChild(inputCard3);
+  addEnterListener(inputCard3)
 
   let container3 = document.createElement('div');
   container3.className = "container2"
   let button = document.createElement('button');
   button.className = "addDataButton ";
+  addDataListener(button);
   container2.appendChild(button);
 
   //ADDING DELETE CARD BUTOTN
@@ -259,8 +268,8 @@ function addCard(tableId, dataCardsId) {
   cell.appendChild(card);
   row.appendChild(cell);
 
-
-  button.addEventListener('click', e => {
+  function addDataListener(element){
+  element.addEventListener('click', e => {
     let buttonParrent = e.target.parentNode;
     let card = buttonParrent.parentNode
     let container = document.createElement('div');
@@ -275,32 +284,77 @@ function addCard(tableId, dataCardsId) {
     inputCard3.className = "inputCard3"
     inputCard3.setAttribute("placeHolder", "Input number");
     container2.appendChild(inputCard3);
+    addEnterListener(inputCard3)
 
     let container3 = document.createElement('div');
     container3.className = "container2"
     let button = document.createElement('button');
     button.className = "addDataButton ";
-    container2.appendChild(e.target);
+    addDataListener(button);
+    container2.appendChild(button);
+
+    card.appendChild(container);
+    card.appendChild(container2);
+  })}
+
+ function addEnterListener(element){
+  element.addEventListener('keyup', e => {
+    let buttonParrent = e.target.parentNode;
+    let card = buttonParrent.parentNode
+
+    //VALIDATION
+    let emoji = card.getElementsByTagName('p');
+    let names =  card.getElementsByClassName('inputCard2');
+    let numbers =  card.getElementsByClassName('inputCard3');
+
+    let goodData = validate(emoji, names, numbers)
+    if(!goodData){
+      return;
+    }
+
+    let container = document.createElement('div');
+    container.className = "container";
+    let inputCard2 = document.createElement('input');
+    inputCard2.className = "inputCard2"
+    inputCard2.setAttribute("placeHolder", "Input name");
+    container.appendChild(inputCard2);
+    let container2 = document.createElement('div');
+    container2.className = "container2";
+    let inputCard3 = document.createElement('input');
+    inputCard3.className = "inputCard3"
+    inputCard3.setAttribute("placeHolder", "Input number");
+    addEnterListener(inputCard3);
+    container2.appendChild(inputCard3);
+
+    let container3 = document.createElement('div');
+    container3.className = "container2"
+    let button = document.createElement('button');
+    button.className = "addDataButton ";
+    addDataListener(button)
+    container2.appendChild(button);
 
     card.appendChild(container);
     card.appendChild(container2);
   })
+ }
+  
 
   deleteButton.addEventListener('click', e => {
     card.remove();
     cell.remove();
   })
 
-  let id = new String("#" + dataCardsId.toString());
-  //console.log("id:" + id);
   $('#' + dataCardsId).colorPick({
     'initialColor': '#8e44ad',
     'palette': ["#1abc9c", "#16a085", "#2ecc71", "#27ae60", "#3498db", "#2980b9", "#9b59b6", "#8e44ad", "#34495e", "#2c3e50", "#f1c40f", "#f39c12", "#e67e22", "#d35400", "#e74c3c", "#c0392b", "#ecf0f1"],
     'onColorSelected': function () {
-      //console.log("The user has selected the color: " + this.color)
       this.element.css({ 'backgroundColor': this.color, 'color': this.color });
     }
   });
+}
+
+function validate(){
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///COLLECTING DATA
@@ -322,7 +376,7 @@ function getDataSingular() {
     let cards = cell[j].getElementsByClassName("card");
 
     let colors = cards[0].getElementsByClassName('picker');
-    //console.log("colors " + colors + " i "+ i);
+
     for (let i = 0; i < colors.length; i++) {
       let color = window.getComputedStyle(colors[i]).backgroundColor;
       colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
@@ -386,7 +440,7 @@ function getDataJoined() {
     let cards = cell[j].getElementsByClassName("card");
 
     let colors = cards[0].getElementsByClassName('picker');
-    //console.log("colors " + colors + " i "+ i);
+
     for (let i = 0; i < colors.length; i++) {
       let color = window.getComputedStyle(colors[i]).backgroundColor;
       colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
@@ -438,7 +492,6 @@ function getDataJoined() {
 
     let k = 0;
     keyArray.forEach(function (key) {
-      console.log(key);
       newNameArray[k] = key;
       k++;
     });
@@ -450,7 +503,6 @@ function getDataJoined() {
 
     let l = 0;
     valueArray.forEach(function (value) {
-      console.log(value);
       newNumberArray[l] = value;
       l++;
     });
@@ -490,7 +542,6 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
   canvas.id = canvasId;
 
   let maxButton = document.createElement('button');
-  maxButton.className = "button-85";
   maxButton.id = maxId;
   maxButton.className = "button-2"
   maxButton.innerHTML = "MAX";
@@ -498,7 +549,6 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
 
 
   let minButton = document.createElement('button');
-  minButton.className = "button-85";
   minButton.id = minId;
   minButton.className = "button-2"
   minButton.innerHTML = "MIN";
@@ -506,7 +556,6 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
 
 
   let avgButton = document.createElement('button');
-  avgButton.className = "button-85";
   avgButton.id = avgId;
   avgButton.className = "button-2"
   avgButton.innerHTML = "AVG";
@@ -804,11 +853,8 @@ function addLineTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
-    //console.log(temp);
-    //console.log("butto id:" + buttonId)
-
+ 
     for (let i = 0; i < temp.length; i++) {
-
 
       let line = {
         type: "line",
@@ -821,7 +867,6 @@ function addLineTransitionListener(buttonId) {
 
       let graph;
 
-      //console.log("in: lineTransitionButton")
       createGraphCard("line", "lineTransition " + i.toString(), "lineTransitionMax" + i.toString(), "lineTransitionMin" + i.toString(), "lineTransitionAvg" + i.toString())
       graph = KidChart("lineTransition", line, 'lineTransition ' + i.toString());
 
@@ -1042,8 +1087,7 @@ function KidChart(typeOfChart, userData, canvasId) {
     ],
   };
   if (typeOfChart == "barPictogram" || typeOfChart == "piePictogram") {
-    console.log("userData labels: " + userData.labels);
-    console.log("userData values : " + userData.values);
+    
     var data = {
       labels: userData.labels,
       datasets: [
@@ -1189,7 +1233,6 @@ function KidChart(typeOfChart, userData, canvasId) {
       max = userData.values[i];
     }
   }
-  console.log("max " + max)
 
   var display = false;
   var scales = {
@@ -1201,6 +1244,7 @@ function KidChart(typeOfChart, userData, canvasId) {
     },
     y: {
       ticks: {
+        stepSize: 1,
         padding: 20,
         color: "#718096",
       },
@@ -1215,9 +1259,10 @@ function KidChart(typeOfChart, userData, canvasId) {
       }
     }
   };
+
   if (typeOfChart == "pieChart" || typeOfChart == "pieTransition" || typeOfChart == "piePictogram") {
     display = true;
-    scales = {
+    scales =    {
       x: {
         grid: {
           display: false // Hide x-axis grid lines
@@ -1230,6 +1275,9 @@ function KidChart(typeOfChart, userData, canvasId) {
       }
     };
   }
+  
+
+  
   // config
   const config = {
     type: userData.type,
@@ -1247,7 +1295,6 @@ function KidChart(typeOfChart, userData, canvasId) {
     plugins: [plugin],
   };
   // render init block
-  console.log("canvas " + document.getElementById(canvasId).id);
   let canvas = document.getElementById(canvasId)
   const myKidChart = new Chart(
     canvas.getContext('2d'),
