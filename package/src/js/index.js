@@ -11,6 +11,7 @@ let maxEmojisGraph;
 function setMaxEmojisGraph(num) {
   maxEmojisGraph = num;
 }
+let generatedCanvasId = 0
 setMaxEmojisGraph(20);
 setEmojisPerCategory(10);
 setEmojiCategories(['food-drink']);
@@ -581,7 +582,7 @@ function getDataJoined() {
     let l = 0;
     valueArray.forEach(function (value) {
       if( value > maxEmojisGraph){
-        alert("Graps can't show values bigger than "+maxEmojisGraph+ ". Value bigger than 21 at card number " + (j+1) + ", input field number " + (i+1) + ".")
+        alert("Graps can't show values bigger than "+maxEmojisGraph+ ". Value bigger than 21 at card number " + (j+1) + ".")
          return false;
       }
       newNumberArray[l] = value;
@@ -923,11 +924,11 @@ function addLinePictogramListener(buttonId) {
 
       let graph;
 
-      createGraphCard("line", "linePictogram " + i.toString(), "linePictogramMax" + i.toString(), "linePictogramMin" + i.toString(), "linePictogramAvg" + i.toString())
-      graph = KidChart('linePictogram', line, "linePictogram " + i.toString());
+      createGraphCard("line", "linePictogram " + generatedCanvasId.toString(), "linePictogramMax" + generatedCanvasId.toString(), "linePictogramMin" + generatedCanvasId.toString(), "linePictogramAvg" + generatedCanvasId.toString())
+      graph = KidChart('linePictogram', line, "linePictogram " + generatedCanvasId.toString());
 
-      graphButtons("line", graph, "linePictogramMax" + i.toString(), "linePictogramMin" + i.toString(), "linePictogramAvg" + i.toString())
-
+      graphButtons("line", graph, "linePictogramMax" + generatedCanvasId.toString(), "linePictogramMin" + generatedCanvasId.toString(), "linePictogramAvg" + generatedCanvasId.toString())
+      generatedCanvasId++;
     }
 
 
@@ -955,10 +956,11 @@ function addLineTransitionListener(buttonId) {
 
       let graph;
 
-      createGraphCard("line", "lineTransition " + i.toString(), "lineTransitionMax" + i.toString(), "lineTransitionMin" + i.toString(), "lineTransitionAvg" + i.toString())
-      graph = KidChart("lineTransition", line, 'lineTransition ' + i.toString());
+      createGraphCard("line", "lineTransition " + generatedCanvasId.toString(), "lineTransitionMax" + generatedCanvasId.toString(), "lineTransitionMin" + generatedCanvasId.toString(), "lineTransitionAvg" + generatedCanvasId.toString())
+      graph = KidChart("lineTransition", line, 'lineTransition ' + generatedCanvasId.toString());
 
-      graphButtons("line", graph, "lineTransitionMax" + i.toString(), "lineTransitionMin" + i.toString(), "lineTransitionAvg" + i.toString())
+      graphButtons("line", graph, "lineTransitionMax" + generatedCanvasId.toString(), "lineTransitionMin" + generatedCanvasId.toString(), "lineTransitionAvg" + generatedCanvasId.toString())
+      generatedCanvasId++;
     }
   });
 }
@@ -985,10 +987,11 @@ function addLineChartListener(buttonId) {
 
       let graph;
 
-      createGraphCard("line", "lineChart " + i.toString(), "lineChartMax" + i.toString(), "lineChartMin" + i.toString(), "lineChartAvg" + i.toString())
-      graph = KidChart("lineChart", line, 'lineChart ' + i.toString());
+      createGraphCard("line", "lineChart " + generatedCanvasId.toString(), "lineChartMax" + generatedCanvasId.toString(), "lineChartMin" + generatedCanvasId.toString(), "lineChartAvg" + generatedCanvasId.toString())
+      graph = KidChart("lineChart", line, 'lineChart ' + generatedCanvasId.toString());
 
-      graphButtons("line", graph, "lineChartMax" + i.toString(), "lineChartMin" + i.toString(), "lineChartAvg" + i.toString())
+      graphButtons("line", graph, "lineChartMax" + generatedCanvasId.toString(), "lineChartMin" + generatedCanvasId.toString(), "lineChartAvg" + generatedCanvasId.toString())
+      generatedCanvasId++;
 
     }
   });
@@ -1016,11 +1019,11 @@ function addBarPictogramListener(buttonId) {
 
       let graph;
 
-      createGraphCard("bar", "barPictogram " + i.toString(), "barPictogramMax" + i.toString(), "barPictogramMin" + i.toString(), "barPictogramAvg" + i.toString())
-      graph = KidChart('barPictogram', line, "barPictogram " + i.toString());
+      createGraphCard("bar", "barPictogram " + generatedCanvasId.toString(), "barPictogramMax" + generatedCanvasId.toString(), "barPictogramMin" + generatedCanvasId.toString(), "barPictogramAvg" + generatedCanvasId.toString())
+      graph = KidChart('barPictogram', line, "barPictogram " + generatedCanvasId.toString());
 
-      graphButtons("bar", graph, "barPictogramMax" + i.toString(), "barPictogramMin" + i.toString(), "barPictogramAvg" + i.toString())
-
+      graphButtons("bar", graph, "barPictogramMax" + generatedCanvasId.toString(), "barPictogramMin" + generatedCanvasId.toString(), "barPictogramAvg" + generatedCanvasId.toString())
+      generatedCanvasId++;
     }
   });
 }
@@ -1047,11 +1050,11 @@ function addBarTransitionListener(buttonId) {
 
       let graph;
 
-      createGraphCard("bar", "barTransition " + i.toString(), "barTransitionMax" + i.toString(), "barTransitionMin" + i.toString(), "barTransitionAvg" + i.toString())
-      graph = KidChart('barTransition', line, "barTransition " + i.toString());
+      createGraphCard("bar", "barTransition " + generatedCanvasId.toString(), "barTransitionMax" + generatedCanvasId.toString(), "barTransitionMin" + generatedCanvasId.toString(), "barTransitionAvg" + generatedCanvasId.toString())
+      graph = KidChart('barTransition', line, "barTransition " + generatedCanvasId.toString());
 
-      graphButtons("bar", graph, "barTransitionMax" + i.toString(), "barTransitionMin" + i.toString(), "barTransitionAvg" + i.toString())
-
+      graphButtons("bar", graph, "barTransitionMax" + generatedCanvasId.toString(), "barTransitionMin" + generatedCanvasId.toString(), "barTransitionAvg" + generatedCanvasId.toString())
+      generatedCanvasId++;
     }
   });
 }
@@ -1078,10 +1081,10 @@ function addBarChartListener(buttonId) {
 
       let graph;
 
-      createGraphCard("bar", "barChart " + i.toString(), "barChartMax" + i.toString(), "barChartMin" + i.toString(), "barChartAvg" + i.toString())
-      graph = KidChart('barChart', line, "barChart " + i.toString());
+      createGraphCard("bar", "barChart " + generatedCanvasId.toString(), "barChartMax" + generatedCanvasId.toString(), "barChartMin" + generatedCanvasId.toString(), "barChartAvg" + generatedCanvasId.toString())
+      graph = KidChart('barChart', line, "barChart " + generatedCanvasId.toString());
 
-      graphButtons("bar", graph, "barChartMax" + i.toString(), "barChartMin" + i.toString(), "barChartAvg" + i.toString())
+      graphButtons("bar", graph, "barChartMax" + generatedCanvasId.toString(), "barChartMin" + generatedCanvasId.toString(), "barChartAvg" + generatedCanvasId.toString())
 
     }
   });
@@ -1108,11 +1111,11 @@ function addPiePictogramListener(buttonId) {
 
       let graph;
 
-      createGraphCard("pie", "piePictogram " + i.toString(), "piePictogramMax" + i.toString(), "piePictogramMin" + i.toString(), "piePictogramAvg" + i.toString())
-      graph = KidChart('piePictogram', line, "piePictogram " + i.toString());
+      createGraphCard("pie", "piePictogram " + generatedCanvasId.toString(), "piePictogramMax" + generatedCanvasId.toString(), "piePictogramMin" + generatedCanvasId.toString(), "piePictogramAvg" + generatedCanvasId.toString())
+      graph = KidChart('piePictogram', line, "piePictogram " + generatedCanvasId.toString());
 
-      graphButtons("pie", graph, "piePictogramMax" + i.toString(), "piePictogramMin" + i.toString(), "piePictogramAvg" + i.toString())
-
+      graphButtons("pie", graph, "piePictogramMax" + generatedCanvasId.toString(), "piePictogramMin" + generatedCanvasId.toString(), "piePictogramAvg" + generatedCanvasId.toString())
+      generatedCanvasId++
     }
   });
 }
@@ -1139,11 +1142,11 @@ function addPieTransitionListener(buttonId) {
 
       let graph;
 
-      createGraphCard("pie", "pieTransition " + i.toString(), "pieTransitionMax" + i.toString(), "pieTransitionMin" + i.toString(), "pieTransitionAvg" + i.toString())
-      graph = KidChart('pieTransition', line, "pieTransition " + i.toString());
+      createGraphCard("pie", "pieTransition " + generatedCanvasId.toString(), "pieTransitionMax" + generatedCanvasId.toString(), "pieTransitionMin" + generatedCanvasId.toString(), "pieTransitionAvg" + generatedCanvasId.toString())
+      graph = KidChart('pieTransition', line, "pieTransition " + generatedCanvasId.toString());
 
-      graphButtons("pie", graph, "pieTransitionMax" + i.toString(), "pieTransitionMin" + i.toString(), "pieTransitionAvg" + i.toString())
-
+      graphButtons("pie", graph, "pieTransitionMax" + generatedCanvasId.toString(), "pieTransitionMin" + generatedCanvasId.toString(), "pieTransitionAvg" + generatedCanvasId.toString())
+      generatedCanvasId++
     }
   });
 }
@@ -1169,11 +1172,11 @@ function addPieChartListener(buttonId) {
 
       let graph;
 
-      createGraphCard("pie", "pieChart " + i.toString(), "pieChartMax" + i.toString(), "pieChartMin" + i.toString(), "pieChartAvg" + i.toString())
-      graph = KidChart('pieChart', line, "pieChart " + i.toString());
+      createGraphCard("pie", "pieChart " + generatedCanvasId.toString(), "pieChartMax" + generatedCanvasId.toString(), "pieChartMin" + generatedCanvasId.toString(), "pieChartAvg" + generatedCanvasId.toString())
+      graph = KidChart('pieChart', line, "pieChart " + generatedCanvasId.toString());
 
-      graphButtons("pie", graph, "pieChartMax" + i.toString(), "pieChartMin" + i.toString(), "pieChartAvg" + i.toString())
-
+      graphButtons("pie", graph, "pieChartMax" + generatedCanvasId.toString(), "pieChartMin" + generatedCanvasId.toString(), "pieChartAvg" + generatedCanvasId.toString())
+      generatedCanvasId++
     }
   });
 }
