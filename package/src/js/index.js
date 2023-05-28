@@ -492,6 +492,7 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
   let maxButton = document.createElement('button');
   maxButton.className = "button-85";
   maxButton.id = maxId;
+  maxButton.className = "button-2"
   maxButton.innerHTML = "MAX";
   maxButton.setAttribute("pressed", "false");
 
@@ -499,6 +500,7 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
   let minButton = document.createElement('button');
   minButton.className = "button-85";
   minButton.id = minId;
+  minButton.className = "button-2"
   minButton.innerHTML = "MIN";
   minButton.setAttribute("pressed", "false");
 
@@ -506,10 +508,12 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
   let avgButton = document.createElement('button');
   avgButton.className = "button-85";
   avgButton.id = avgId;
+  avgButton.className = "button-2"
   avgButton.innerHTML = "AVG";
   avgButton.setAttribute("pressed", "false");
 
   let buttonDiv = document.createElement("div")
+  buttonDiv.className = "buttonDiv"
 
   if (type == "pie") {
 
@@ -547,7 +551,7 @@ function toString(value) {
 }
 function graphButtons(type, graph, maxId, minId, avgId) {
 
-  
+
   document.getElementById(maxId).addEventListener('click', () => {
     graph.options.scales.y.grid.color = (ctx) => {
 
@@ -576,16 +580,35 @@ function graphButtons(type, graph, maxId, minId, avgId) {
         }
       }
 
-      let avg = 0;
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+      
+     let avg = parseFloat(0);
+     for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
 
-        avg += graph.data.datasets[0].data[i];
+       avg += parseFloat(graph.data.datasets[0].data[i]);
 
-        if (i == graph.data.datasets[0].data.length - 1) {
-          avg = avg / (i + 1);
-        }
+       if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
+         avg =  parseFloat(avg) /  parseFloat((i + 1));
+       }
 
-      }
+     }
+
+     if (maxPressed) {
+       maxButt.innerHTML =  "MAX= " + max;
+     } else {
+       maxButt.innerHTML = "MAX";
+     }
+
+     if (minPressed) {
+       minButt.innerHTML =  "MIN= " + min;
+     } else {
+       minButt.innerHTML = "MIN";
+     }
+
+     if (avgPressed) {
+       avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
+     } else {
+       avgButt.innerHTML = "AVG";
+     }
 
       if (ctx.tick.value == max && maxPressed) {
         return "green"
@@ -631,15 +654,34 @@ function graphButtons(type, graph, maxId, minId, avgId) {
         }
       }
 
-      let avg = 0;
+
+      let avg = parseFloat(0);
       for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
 
-        avg += graph.data.datasets[0].data[i];
+        avg += parseFloat(graph.data.datasets[0].data[i]);
 
-        if (i == graph.data.datasets[0].data.length - 1) {
-          avg = avg / (i + 1);
+        if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
+          avg =  parseFloat(avg) /  parseFloat((i + 1));
         }
 
+      }
+
+      if (maxPressed) {
+        maxButt.innerHTML =  "MAX= " + max;
+      } else {
+        maxButt.innerHTML = "MAX";
+      }
+
+      if (minPressed) {
+        minButt.innerHTML =  "MIN= " + min;
+      } else {
+        minButt.innerHTML = "MIN";
+      }
+
+      if (avgPressed) {
+        avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
+      } else {
+        avgButt.innerHTML = "AVG";
       }
 
       if (ctx.tick.value == max && maxPressed) {
@@ -684,15 +726,33 @@ function graphButtons(type, graph, maxId, minId, avgId) {
         }
       }
 
-      let avg = 0;
+     let avg = parseFloat(0);
       for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
 
-        avg += graph.data.datasets[0].data[i];
+        avg += parseFloat(graph.data.datasets[0].data[i]);
 
-        if (i == graph.data.datasets[0].data.length - 1) {
-          avg = avg / (i + 1);
+        if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
+          avg =  parseFloat(avg) /  parseFloat((i + 1));
         }
 
+      }
+
+      if (maxPressed) {
+        maxButt.innerHTML =  "MAX= " + max;
+      } else {
+        maxButt.innerHTML = "MAX";
+      }
+
+      if (minPressed) {
+        minButt.innerHTML =  "MIN= " + min;
+      } else {
+        minButt.innerHTML = "MIN";
+      }
+
+      if (avgPressed) {
+        avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
+      } else {
+        avgButt.innerHTML = "AVG";
       }
 
       if (ctx.tick.value == max && maxPressed) {
@@ -1155,7 +1215,7 @@ function KidChart(typeOfChart, userData, canvasId) {
       }
     }
   };
-  if (typeOfChart == "pieChart") {
+  if (typeOfChart == "pieChart" || typeOfChart == "pieTransition" || typeOfChart == "piePictogram") {
     display = true;
     scales = {
       x: {
