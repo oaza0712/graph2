@@ -447,6 +447,10 @@ function getDataSingular() {
 
     for (let i = 0; i < number.length; i++) {
       if (number[i].value.trim().length != 0) {
+        if( number[i].value.trim().replace(/,/g, ".") > maxEmojisGraph){
+          alert("Graps can't show values bigger than "+maxEmojisGraph+ ". Value bigger than 21 at card number " + (j+1) + ", input field number " + (i+1) + ".")
+           return false;
+        }
         numberArray[i] = number[i].value.trim().replace(/,/g, ".")
       }else{
         cardIsEmpty=true;
@@ -543,7 +547,7 @@ function getDataJoined() {
       if(cardIsEmpty){
         return cardIsEmpty}
     }
-    
+
     let newColorArray = [];
     let newBorderArray = [];
     let newUnicodeArray = [];
@@ -576,6 +580,10 @@ function getDataJoined() {
 
     let l = 0;
     valueArray.forEach(function (value) {
+      if( value > maxEmojisGraph){
+        alert("Graps can't show values bigger than "+maxEmojisGraph+ ". Value bigger than 21 at card number " + (j+1) + ", input field number " + (i+1) + ".")
+         return false;
+      }
       newNumberArray[l] = value;
       l++;
     });
@@ -587,10 +595,6 @@ function getDataJoined() {
       newUnicodeArray[i] = unicodeArray[0];
     }
     
-   
-    
-
-
     let oneCardData = {
       colors: newColorArray,
       border: newBorderArray,
@@ -1153,7 +1157,6 @@ function addPieChartListener(buttonId) {
     }
     document.getElementsByClassName("pieChart ");
     for (let i = 0; i < temp.length; i++) {
-
 
       let line = {
         type: "pie",
