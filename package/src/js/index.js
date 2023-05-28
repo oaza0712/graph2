@@ -28,7 +28,6 @@ function create_input_table(tableId, buttonId, dataCardsId) {
   let createBarTransButton = graphButton('barTransitionButton', "Create bar transition graph")
   let createBarGraphButton = graphButton('barGraphButton', "Create bar graph")
 
-
   let createPiePictogramButton = graphButton('piePictogramButton', "Create pie pictogram")
   let createPieTransButton = graphButton('pieTransitionButton', "Create pie transition graph")
   let createPieGraphButton = graphButton('pieGraphButton', "Create pie graph")
@@ -66,8 +65,13 @@ function create_input_table(tableId, buttonId, dataCardsId) {
   addLineTransitionListener('lineTransitionButton')
   addLineChartListener('lineGraphButton')
 
+  addBarPictogramListener('barPictogramButton')
   addBarTransitionListener('barTransitionButton')
+  addBarChartListener('barGraphButton')
 
+  addPiePictogramListener('piePictogramButton')
+  addPieTransitionListener('pieTransitionButton')
+  addPieChartListener('pieGraphButton')
 
   return true;
 
@@ -222,12 +226,6 @@ function addCard(tableId, dataCardsId) {
   //MAKING CARDS FOR NUMBER AND TEXT INPUT
   let container = document.createElement('div');
   container.className = "container";
-
-  /*let datasetName = document.createElement('input');
-  datasetName.className = "container";
-  datasetName.setAttribute("placeHolder", "Input dataset name");
-
-  container.appendChild(datasetName);*/
 
   let inputCard2 = document.createElement('input');
   inputCard2.className = "inputCard2"
@@ -431,7 +429,7 @@ function getDataJoined() {
       if (counter.get(numberArray[i].toString()) == null) {
         counter.set(numberArray[i].toString(), 0);
       }
-      counter.set(numberArray[i].toString(), counter.get(numberArray[i].toString())+1);
+      counter.set(numberArray[i].toString(), counter.get(numberArray[i].toString()) + 1);
     }
 
     var keys = counter.keys();
@@ -444,8 +442,8 @@ function getDataJoined() {
       newNameArray[k] = key;
       k++;
     });
-    
-     
+
+
     var values = counter.values();
 
     var valueArray = Array.from(values);
@@ -456,14 +454,20 @@ function getDataJoined() {
       newNumberArray[l] = value;
       l++;
     });
-    
+
+
+    for (let i = 0; i < nameArray.length; i++) {
+      newColorArray[i] = colorArray[0]
+      newBorderArray[i] = borderArray[0]
+      newUnicodeArray[i] = unicodeArray[0];
+    }
 
     let oneCardData = {
-      colors: colorArray,
-      border: borderArray,
+      colors: newColorArray,
+      border: newBorderArray,
       labels: newNameArray,
       values: newNumberArray,
-      unicode: unicodeArray
+      unicode: newUnicodeArray
     }
 
     cardsArray[j] = oneCardData;
@@ -474,7 +478,7 @@ function getDataJoined() {
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CREATING GRAPH
-function createGraphCard(canvasId) {
+function createGraphCard(type, canvasId, maxId, minId, avgId) {
   let body = document.getElementById('body');
   let chartCard = document.createElement('div');
   chartCard.className = "chartCard";
@@ -484,34 +488,226 @@ function createGraphCard(canvasId) {
   chartBox.className = "chartBox";
   let canvas = document.createElement('canvas');
   canvas.id = canvasId;
+
   let maxButton = document.createElement('button');
   maxButton.className = "button-85";
-  maxButton.id = "maxButton"
-  maxButton.innerHTML = "Show MAX value";
-  chartBox.appendChild(chartName);
-  chartBox.appendChild(canvas);
-  chartBox.appendChild(maxButton);
-  chartCard.appendChild(chartBox);
+  maxButton.id = maxId;
+  maxButton.innerHTML = "MAX";
+  maxButton.setAttribute("pressed", "false");
+
+
+  let minButton = document.createElement('button');
+  minButton.className = "button-85";
+  minButton.id = minId;
+  minButton.innerHTML = "MIN";
+  minButton.setAttribute("pressed", "false");
+
+
+  let avgButton = document.createElement('button');
+  avgButton.className = "button-85";
+  avgButton.id = avgId;
+  avgButton.innerHTML = "AVG";
+  avgButton.setAttribute("pressed", "false");
+
+  let buttonDiv = document.createElement("div")
+
+  if (type == "pie") {
+
+    let div = document.createElement("div")
+    div.appendChild(chartName);
+    div.appendChild(canvas);
+    buttonDiv.appendChild(maxButton);
+    buttonDiv.appendChild(minButton);
+    buttonDiv.appendChild(avgButton);
+    div.appendChild(buttonDiv);
+    chartCard.appendChild(div);
+
+  } else {
+    chartBox.appendChild(chartName);
+    chartBox.appendChild(canvas);
+    buttonDiv.appendChild(maxButton);
+    buttonDiv.appendChild(minButton);
+    buttonDiv.appendChild(avgButton);
+    chartBox.appendChild(buttonDiv)
+    chartCard.appendChild(chartBox);
+  }
+
   body.appendChild(chartCard);
 }
 
-function graphButtons(graph) {
-  document.getElementById("maxButton").addEventListener('click', () => {
+function toBoolean(value) {
+  if (value == "true") {
+    return true
+  } else return false;
+}
+function toString(value) {
+  if (value) {
+    return "true"
+  } else return "false";
+}
+function graphButtons(type, graph, maxId, minId, avgId) {
+
+  
+  document.getElementById(maxId).addEventListener('click', () => {
     graph.options.scales.y.grid.color = (ctx) => {
+
+      let maxButt = document.getElementById(maxId)
+      let maxPressed = !toBoolean(maxButt.getAttribute("pressed"))
+      maxButt.setAttribute("pressed", toString(maxPressed))
+
+      let minButt = document.getElementById(minId)
+      let minPressed = toBoolean(minButt.getAttribute("pressed"))
+
+      let avgButt = document.getElementById(avgId)
+      let avgPressed = toBoolean(avgButt.getAttribute("pressed"))
+
+
       let max = graph.data.datasets[0].data[0];
       for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
         if (max < graph.data.datasets[0].data[i]) {
           max = graph.data.datasets[0].data[i];
         }
       }
-      if (ctx.tick.value == max) {
-        return "red"
+
+      let min = graph.data.datasets[0].data[0];
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+        if (min > graph.data.datasets[0].data[i]) {
+          min = graph.data.datasets[0].data[i];
+        }
+      }
+
+      let avg = 0;
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+
+        avg += graph.data.datasets[0].data[i];
+
+        if (i == graph.data.datasets[0].data.length - 1) {
+          avg = avg / (i + 1);
+        }
+
+      }
+
+      if (ctx.tick.value == max && maxPressed) {
+        return "green"
+      } else if (ctx.tick.value == min && minPressed) {
+        return 'red'
+      } else if (ctx.tick.value == avg && avgPressed) {
+        return 'purple'
       } else {
-        return 'grey'
+        return 'rgba(0, 0, 0, 0.1)'
+      }
+    };
+
+    graph.update();
+  })
+
+  document.getElementById(minId).addEventListener('click', () => {
+    graph.options.scales.y.grid.color = (ctx) => {
+
+      let maxButt = document.getElementById(maxId)
+      let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
+
+
+      let minButt = document.getElementById(minId)
+      let minPressed = !toBoolean(minButt.getAttribute("pressed"))
+      minButt.setAttribute("pressed", toString(minPressed))
+
+
+      let avgButt = document.getElementById(avgId)
+      let avgPressed = toBoolean(avgButt.getAttribute("pressed"))
+
+
+      let max = graph.data.datasets[0].data[0];
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+        if (max < graph.data.datasets[0].data[i]) {
+          max = graph.data.datasets[0].data[i];
+        }
+      }
+
+      let min = graph.data.datasets[0].data[0];
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+        if (min > graph.data.datasets[0].data[i]) {
+          min = graph.data.datasets[0].data[i];
+        }
+      }
+
+      let avg = 0;
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+
+        avg += graph.data.datasets[0].data[i];
+
+        if (i == graph.data.datasets[0].data.length - 1) {
+          avg = avg / (i + 1);
+        }
+
+      }
+
+      if (ctx.tick.value == max && maxPressed) {
+        return "green"
+      } else if (ctx.tick.value == min && minPressed) {
+        return 'red'
+      } else if (ctx.tick.value == avg && avgPressed) {
+        return 'purple'
+      } else {
+        return 'rgba(0, 0, 0, 0.1)'
       }
     };
     graph.update();
   })
+
+  document.getElementById(avgId).addEventListener('click', () => {
+    graph.options.scales.y.grid.color = (ctx) => {
+      let maxButt = document.getElementById(maxId)
+      let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
+
+
+      let minButt = document.getElementById(minId)
+      let minPressed = toBoolean(minButt.getAttribute("pressed"))
+
+
+      let avgButt = document.getElementById(avgId)
+      let avgPressed = !toBoolean(avgButt.getAttribute("pressed"))
+      avgButt.setAttribute("pressed", toString(avgPressed))
+
+
+      let max = graph.data.datasets[0].data[0];
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+        if (max < graph.data.datasets[0].data[i]) {
+          max = graph.data.datasets[0].data[i];
+        }
+      }
+
+      let min = graph.data.datasets[0].data[0];
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+        if (min > graph.data.datasets[0].data[i]) {
+          min = graph.data.datasets[0].data[i];
+        }
+      }
+
+      let avg = 0;
+      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+
+        avg += graph.data.datasets[0].data[i];
+
+        if (i == graph.data.datasets[0].data.length - 1) {
+          avg = avg / (i + 1);
+        }
+
+      }
+
+      if (ctx.tick.value == max && maxPressed) {
+        return "green"
+      } else if (ctx.tick.value == min && minPressed) {
+        return 'red'
+      } else if (ctx.tick.value == avg && avgPressed) {
+        return 'purple'
+      } else {
+        return 'rgba(0, 0, 0, 0.1)'
+      }
+    };
+    graph.update();
+  })
+
 }
 
 function addLinePictogramListener(buttonId) {
@@ -532,12 +728,10 @@ function addLinePictogramListener(buttonId) {
 
       let graph;
 
-      console.log("in: linePictogramButton " + [i])
-
-      createGraphCard("linePictogram " + i.toString())
+      createGraphCard("line", "linePictogram " + i.toString(), "linePictogramMax" + i.toString(), "linePictogramMin" + i.toString(), "linePictogramAvg" + i.toString())
       graph = KidChart('linePictogram', line, "linePictogram " + i.toString());
 
-      graphButtons(graph)
+      graphButtons("line", graph, "linePictogramMax" + i.toString(), "linePictogramMin" + i.toString(), "linePictogramAvg" + i.toString())
 
     }
 
@@ -545,7 +739,6 @@ function addLinePictogramListener(buttonId) {
 
   });
 }
-
 
 function addLineTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
@@ -569,19 +762,18 @@ function addLineTransitionListener(buttonId) {
       let graph;
 
       //console.log("in: lineTransitionButton")
-      createGraphCard('lineTransition' + i.toString())
-      graph = KidChart("lineTransition", line, 'lineTransition' + i.toString());
+      createGraphCard("line", "lineTransition " + i.toString(), "lineTransitionMax" + i.toString(), "lineTransitionMin" + i.toString(), "lineTransitionAvg" + i.toString())
+      graph = KidChart("lineTransition", line, 'lineTransition ' + i.toString());
 
-      graphButtons(graph)
+      graphButtons("line", graph, "lineTransitionMax" + i.toString(), "lineTransitionMin" + i.toString(), "lineTransitionAvg" + i.toString())
     }
   });
 }
+
 function addLineChartListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
-    //console.log(temp);
-    //console.log("butto id:" + buttonId)
 
     for (let i = 0; i < temp.length; i++) {
 
@@ -597,20 +789,20 @@ function addLineChartListener(buttonId) {
 
       let graph;
 
-      //console.log("in: lineGraphButton")
-      createGraphCard('lineChart' + i.toString())
-      graph = KidChart("lineChart", line, 'lineChart' + i.toString());
+      createGraphCard("line", "lineChart " + i.toString(), "lineChartMax" + i.toString(), "lineChartMin" + i.toString(), "lineChartAvg" + i.toString())
+      graph = KidChart("lineChart", line, 'lineChart ' + i.toString());
 
-      graphButtons(graph)
+      graphButtons("line", graph, "lineChartMax" + i.toString(), "lineChartMin" + i.toString(), "lineChartAvg" + i.toString())
 
     }
   });
 }
 
-function addBarTransitionListener(buttonId) {
+function addBarPictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
+    document.getElementsByClassName("barPictogram ");
     for (let i = 0; i < temp.length; i++) {
 
 
@@ -625,15 +817,151 @@ function addBarTransitionListener(buttonId) {
 
       let graph;
 
-      createGraphCard("barTransition " + i.toString())
-      graph = KidChart('barTransition', line, "barTransition " + i.toString());
+      createGraphCard("bar", "barPictogram " + i.toString(), "barPictogramMax" + i.toString(), "barPictogramMin" + i.toString(), "barPictogramAvg" + i.toString())
+      graph = KidChart('barPictogram', line, "barPictogram " + i.toString());
 
-      graphButtons(graph)
+      graphButtons("bar", graph, "barPictogramMax" + i.toString(), "barPictogramMin" + i.toString(), "barPictogramAvg" + i.toString())
 
     }
+  });
+}
+
+function addBarTransitionListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataJoined();
+    document.getElementsByClassName("barTransition ");
+    for (let i = 0; i < temp.length; i++) {
 
 
+      let line = {
+        type: "bar",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
 
+      let graph;
+
+      createGraphCard("bar", "barTransition " + i.toString(), "barTransitionMax" + i.toString(), "barTransitionMin" + i.toString(), "barTransitionAvg" + i.toString())
+      graph = KidChart('barTransition', line, "barTransition " + i.toString());
+
+      graphButtons("bar", graph, "barTransitionMax" + i.toString(), "barTransitionMin" + i.toString(), "barTransitionAvg" + i.toString())
+
+    }
+  });
+}
+
+function addBarChartListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataJoined();
+    document.getElementsByClassName("barChart ");
+    for (let i = 0; i < temp.length; i++) {
+
+
+      let line = {
+        type: "bar",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
+
+      let graph;
+
+      createGraphCard("bar", "barChart " + i.toString(), "barChartMax" + i.toString(), "barChartMin" + i.toString(), "barChartAvg" + i.toString())
+      graph = KidChart('barChart', line, "barChart " + i.toString());
+
+      graphButtons("bar", graph, "barChartMax" + i.toString(), "barChartMin" + i.toString(), "barChartAvg" + i.toString())
+
+    }
+  });
+}
+function addPiePictogramListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataJoined();
+    document.getElementsByClassName("piePictogram ");
+    for (let i = 0; i < temp.length; i++) {
+
+
+      let line = {
+        type: "pie",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
+
+      let graph;
+
+      createGraphCard("pie", "piePictogram " + i.toString(), "piePictogramMax" + i.toString(), "piePictogramMin" + i.toString(), "piePictogramAvg" + i.toString())
+      graph = KidChart('piePictogram', line, "piePictogram " + i.toString());
+
+      graphButtons("pie", graph, "piePictogramMax" + i.toString(), "piePictogramMin" + i.toString(), "piePictogramAvg" + i.toString())
+
+    }
+  });
+}
+
+function addPieTransitionListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataJoined();
+    document.getElementsByClassName("pieTransition ");
+    for (let i = 0; i < temp.length; i++) {
+
+
+      let line = {
+        type: "pie",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
+
+      let graph;
+
+      createGraphCard("pie", "pieTransition " + i.toString(), "pieTransitionMax" + i.toString(), "pieTransitionMin" + i.toString(), "pieTransitionAvg" + i.toString())
+      graph = KidChart('pieTransition', line, "pieTransition " + i.toString());
+
+      graphButtons("pie", graph, "pieTransitionMax" + i.toString(), "pieTransitionMin" + i.toString(), "pieTransitionAvg" + i.toString())
+
+    }
+  });
+}
+
+function addPieChartListener(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.addEventListener('click', (event) => {
+    let temp = getDataJoined();
+    document.getElementsByClassName("pieChart ");
+    for (let i = 0; i < temp.length; i++) {
+
+
+      let line = {
+        type: "pie",
+        color: temp[i].colors,
+        border: temp[i].border,
+        labels: temp[i].labels,
+        values: temp[i].values,
+        unicode: temp[i].unicode,
+      };
+
+      let graph;
+
+      createGraphCard("pie", "pieChart " + i.toString(), "pieChartMax" + i.toString(), "pieChartMin" + i.toString(), "pieChartAvg" + i.toString())
+      graph = KidChart('pieChart', line, "pieChart " + i.toString());
+
+      graphButtons("pie", graph, "pieChartMax" + i.toString(), "pieChartMin" + i.toString(), "pieChartAvg" + i.toString())
+
+    }
   });
 }
 
@@ -804,8 +1132,43 @@ function KidChart(typeOfChart, userData, canvasId) {
   console.log("max " + max)
 
   var display = false;
+  var scales = {
+    x: {
+      ticks: {
+        padding: 20,
+        color: "#718096",
+      },
+    },
+    y: {
+      ticks: {
+        padding: 20,
+        color: "#718096",
+      },
+      beginAtZero: true,
+      min: 0,
+      max: parseFloat(max) + 1,
+      drawBorder: true,
+      grid: {
+        color: (ctx) => {
+          return 'rgba(0, 0, 0, 0.1)'
+        },
+      }
+    }
+  };
   if (typeOfChart == "pieChart") {
     display = true;
+    scales = {
+      x: {
+        grid: {
+          display: false // Hide x-axis grid lines
+        }
+      },
+      y: {
+        grid: {
+          display: false // Hide y-axis grid lines
+        }
+      }
+    };
   }
   // config
   const config = {
@@ -819,29 +1182,7 @@ function KidChart(typeOfChart, userData, canvasId) {
         },
       },
       responsive: true,
-      scales: {
-        x: {
-          ticks: {
-            padding: 20,
-            color: "#718096",
-          },
-        },
-        y: {
-          ticks: {
-            padding: 20,
-            color: "#718096",
-          },
-          beginAtZero: true,
-          min: 0,
-          max: parseFloat(max) + 1,
-          drawBorder: true,
-          grid: {
-            color: (ctx) => {
-              return "#718096"
-            },
-          }
-        }
-      }
+      scales: scales
     },
     plugins: [plugin],
   };

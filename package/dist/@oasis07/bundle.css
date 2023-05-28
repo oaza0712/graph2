@@ -207,7 +207,7 @@ body {
   width: 100vw;
   height: 40px;
   background: #1a1a1a;
-  color: rgb(54, 162, 235);
+  color: rgba(54, 162, 235, 1);
 }
 
 .chartMenu p {
@@ -225,11 +225,10 @@ body {
 }
 
 .chartBox {
-  width: 900px;
-  
+  width: 700px;
   padding: 20px;
   border-radius: 20px;
-  border: solid 3px rgb(54, 162, 235);
+  border: solid 3px rgba(54, 162, 235, 1);
   background: white;
 }
 
@@ -239,7 +238,6 @@ td {
   border: 4px solid rgb(99, 196, 215);
   box-shadow: 10px 10px 5px lightblue;
 }
-
 /* CSS */
 #tableButtons {
   display: flex;
