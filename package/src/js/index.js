@@ -277,14 +277,10 @@ function addCard(tableId, dataCardsId) {
      let emoji = card.getElementsByTagName('p');
      let names =  card.getElementsByClassName('inputCard2');
      let numbers =  card.getElementsByClassName('inputCard3');
-     console.log("emoji" + emoji.length)
-     console.log("names" + names.length)
-     console.log("numbers " + numbers.length)
+   
  
      let goodData = validate(emoji, names, numbers)
-     if(!goodData){
-       console.log("returning fromm recursion")
- 
+     if(!goodData){ 
        return;
      } 
 
@@ -323,14 +319,10 @@ function addCard(tableId, dataCardsId) {
     let emoji = card.getElementsByTagName('p');
     let names =  card.getElementsByClassName('inputCard2');
     let numbers =  card.getElementsByClassName('inputCard3');
-    console.log("emoji" + emoji.length)
-    console.log("names" + names.length)
-    console.log("numbers " + numbers.length)
+ 
 
     let goodData = validate(emoji, names, numbers)
     if(!goodData){
-      console.log("returning fromm recursion")
-
       return;
     }
 
@@ -384,14 +376,12 @@ function validate(emoji, names, numbers){
   }
     
     for(let i = 0; i < names.length; i++){
-      console.log("names[i].tetxContent " + names[i].value)
       if(names[i].value.trim() == ""){
         alert("Input name fields can't be empty!")
         return false;
       }
     }
     for(let i =0; i < numbers.length; i++){
-      console.log("numbers[i].tetxContent " + numbers[i].value.trim())
 
       if(numbers[i].value.trim() == "" || (!(/^\d+(\.\d+)?$/.test(numbers[i].value.trim())) && !(/^\d+(\,\d+)?$/.test(numbers[i].value.trim()))) ){
         alert("Input number fields can't be empty and they must be positive numbers!")
@@ -1216,8 +1206,9 @@ function KidChart(typeOfChart, userData, canvasId) {
           }
           let a = 0.5 * size * 0.5 * size;
           let b = max_width * max_width;
-          let radius = (width / 2 - Math.ceil(Math.sqrt(a + b / 4)));
+          let radius = (width / 2 - Math.ceil(Math.sqrt(a + b / 4)))-5;
           for (let j = 0; j < Math.floor(userData.values[i]); j++) {
+
             ctx.font = `${size}px Arial`;
             ctx.fillText(
               userData.unicode[i],
@@ -1312,11 +1303,13 @@ function KidChart(typeOfChart, userData, canvasId) {
     display = true;
     scales =    {
       x: {
+        display: false,
         grid: {
           display: false // Hide x-axis grid lines
         }
       },
       y: {
+        display: false,
         grid: {
           display: false // Hide y-axis grid lines
         }
@@ -1353,5 +1346,4 @@ function KidChart(typeOfChart, userData, canvasId) {
 }
 export default {
   create_input_table
-  //collectButton
 };
