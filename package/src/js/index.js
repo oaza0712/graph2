@@ -7,6 +7,11 @@ let EmojisPerCategory;
 function setEmojisPerCategory(num) {
   EmojisPerCategory = num;
 }
+let maxEmojisGraph;
+function setMaxEmojisGraph(num) {
+  maxEmojisGraph = num;
+}
+setMaxEmojisGraph(20);
 setEmojisPerCategory(10);
 setEmojiCategories(['food-drink']);
 
@@ -402,7 +407,8 @@ function getDataSingular() {
   let cardsArray = [];
 
   for (let j = 0; j < cell.length; j++) {
-
+    let cardIsEmpty = false;
+    
     let colorArray = [];
     let borderArray = [];
     let unicodeArray = [];
@@ -412,35 +418,51 @@ function getDataSingular() {
     let cards = cell[j].getElementsByClassName("card");
 
     let colors = cards[0].getElementsByClassName('picker');
-
+    let unicode = cards[0].getElementsByClassName('emoji-input');
+    let name = cards[0].getElementsByClassName('inputCard2');
+    let number = cards[0].getElementsByClassName('inputCard3');
+    
     for (let i = 0; i < colors.length; i++) {
       let color = window.getComputedStyle(colors[i]).backgroundColor;
       colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
       borderArray[i] = color.replace(')', ', 0.8)').replace('rgb', 'rgba');
     }
 
-    let unicode = cards[0].getElementsByClassName('emoji-input');
-
     for (let i = 0; i < unicode.length; i++) {
       if (unicode[i].textContent.trim != "") {
         unicodeArray[0] = unicode[i].textContent
+      } else {
+        cardIsEmpty=true;
       }
 
     }
 
-    let name = cards[0].getElementsByClassName('inputCard2');
     for (let i = 0; i < name.length; i++) {
-      if (name[i].value.length != 0) {
-        nameArray[i] = name[i].value
+      if (name[i].value.trim().length != 0) {
+        nameArray[i] = name[i].value.trim()
+      }else{
+        cardIsEmpty=true;
       }
     }
 
-    let number = cards[0].getElementsByClassName('inputCard3');
     for (let i = 0; i < number.length; i++) {
-      if (number[i].value.length != 0) {
-        numberArray[i] = number[i].value
+      if (number[i].value.trim().length != 0) {
+        numberArray[i] = number[i].value.trim().replace(/,/g, ".")
+      }else{
+        cardIsEmpty=true;
       }
     }
+    
+
+    if(cardIsEmpty){
+      alert("Fill the empty places on cards!")
+      return cardIsEmpty
+    } else{
+      cardIsEmpty = !validate(unicode, name, number)
+      if(cardIsEmpty){
+        return cardIsEmpty}
+    }
+    
 
     let oneCardData = {
       colors: colorArray,
@@ -449,12 +471,12 @@ function getDataSingular() {
       values: numberArray,
       unicode: unicodeArray
     }
-
+     
     cardsArray[j] = oneCardData;
 
   }
 
-  return cardsArray;
+    return cardsArray;
 }
 
 
@@ -466,6 +488,7 @@ function getDataJoined() {
   let cardsArray = [];
 
   for (let j = 0; j < cell.length; j++) {
+    let cardIsEmpty = false;
 
     let colorArray = [];
     let borderArray = [];
@@ -488,25 +511,39 @@ function getDataJoined() {
     for (let i = 0; i < unicode.length; i++) {
       if (unicode[i].textContent.trim != "") {
         unicodeArray[0] = unicode[i].textContent
+      } else{
+        cardIsEmpty=true;
       }
-
     }
 
     let name = cards[0].getElementsByClassName('inputCard2');
     for (let i = 0; i < name.length; i++) {
-      if (name[i].value.length != 0) {
-        nameArray[i] = name[i].value
+      if (name[i].value.trim().length != 0) {
+        nameArray[i] = name[i].value.trim()
+      }else{
+        cardIsEmpty=true;
       }
     }
 
     let number = cards[0].getElementsByClassName('inputCard3');
     for (let i = 0; i < number.length; i++) {
-      if (number[i].value.length != 0) {
-        numberArray[i] = number[i].value
+      if (number[i].value.trim().length != 0) {
+        numberArray[i] = number[i].value.trim()
 
+      }else{
+        cardIsEmpty=true;
       }
     }
-
+    
+    if(cardIsEmpty){
+      alert("Fill the empty places on cards!")
+      return cardIsEmpty
+    } else{
+      cardIsEmpty = !validate(unicode, name, number)
+      if(cardIsEmpty){
+        return cardIsEmpty}
+    }
+    
     let newColorArray = [];
     let newBorderArray = [];
     let newUnicodeArray = [];
@@ -549,6 +586,10 @@ function getDataJoined() {
       newBorderArray[i] = borderArray[0]
       newUnicodeArray[i] = unicodeArray[0];
     }
+    
+   
+    
+
 
     let oneCardData = {
       colors: newColorArray,
@@ -861,8 +902,11 @@ function addLinePictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
+    if(typeof temp === 'boolean'){
+      return;
+    }
     for (let i = 0; i < temp.length; i++) {
-
+       
 
       let line = {
         type: "line",
@@ -891,7 +935,9 @@ function addLineTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
- 
+    if(typeof temp === 'boolean'){
+      return;
+    }
     for (let i = 0; i < temp.length; i++) {
 
       let line = {
@@ -917,6 +963,9 @@ function addLineChartListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
+    if(typeof temp === 'boolean'){
+      return;
+    }
 
     for (let i = 0; i < temp.length; i++) {
 
@@ -945,6 +994,9 @@ function addBarPictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
+    if(typeof temp === 'boolean'){
+      return;
+    }
     document.getElementsByClassName("barPictogram ");
     for (let i = 0; i < temp.length; i++) {
 
@@ -973,6 +1025,9 @@ function addBarTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
+    if(typeof temp === 'boolean'){
+      return;
+    }
     document.getElementsByClassName("barTransition ");
     for (let i = 0; i < temp.length; i++) {
 
@@ -1001,6 +1056,9 @@ function addBarChartListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
+    if(typeof temp === 'boolean'){
+      return;
+    }
     document.getElementsByClassName("barChart ");
     for (let i = 0; i < temp.length; i++) {
 
@@ -1028,6 +1086,9 @@ function addPiePictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
+    if(typeof temp === 'boolean'){
+      return;
+    }
     document.getElementsByClassName("piePictogram ");
     for (let i = 0; i < temp.length; i++) {
 
@@ -1056,6 +1117,9 @@ function addPieTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
+    if(typeof temp === 'boolean'){
+      return;
+    }
     document.getElementsByClassName("pieTransition ");
     for (let i = 0; i < temp.length; i++) {
 
@@ -1084,6 +1148,9 @@ function addPieChartListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
+    if(typeof temp === 'boolean'){
+      return;
+    }
     document.getElementsByClassName("pieChart ");
     for (let i = 0; i < temp.length; i++) {
 
@@ -1144,7 +1211,6 @@ function KidChart(typeOfChart, userData, canvasId) {
       labels: userData.labels,
       datasets: [
         {
-          //label: userData.labelDataset,
           data: userData.values,
           fill: false,
           backgroundColor: userData.color,
