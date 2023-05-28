@@ -272,6 +272,22 @@ function addCard(tableId, dataCardsId) {
   element.addEventListener('click', e => {
     let buttonParrent = e.target.parentNode;
     let card = buttonParrent.parentNode
+    
+     //VALIDATION
+     let emoji = card.getElementsByTagName('p');
+     let names =  card.getElementsByClassName('inputCard2');
+     let numbers =  card.getElementsByClassName('inputCard3');
+     console.log("emoji" + emoji.length)
+     console.log("names" + names.length)
+     console.log("numbers " + numbers.length)
+ 
+     let goodData = validate(emoji, names, numbers)
+     if(!goodData){
+       console.log("returning fromm recursion")
+ 
+       return;
+     } 
+
     let container = document.createElement('div');
     container.className = "container";
     let inputCard2 = document.createElement('input');
@@ -299,6 +315,7 @@ function addCard(tableId, dataCardsId) {
 
  function addEnterListener(element){
   element.addEventListener('keyup', e => {
+    if (e.key === 'Enter') {
     let buttonParrent = e.target.parentNode;
     let card = buttonParrent.parentNode
 
@@ -306,9 +323,14 @@ function addCard(tableId, dataCardsId) {
     let emoji = card.getElementsByTagName('p');
     let names =  card.getElementsByClassName('inputCard2');
     let numbers =  card.getElementsByClassName('inputCard3');
+    console.log("emoji" + emoji.length)
+    console.log("names" + names.length)
+    console.log("numbers " + numbers.length)
 
     let goodData = validate(emoji, names, numbers)
     if(!goodData){
+      console.log("returning fromm recursion")
+
       return;
     }
 
@@ -335,7 +357,7 @@ function addCard(tableId, dataCardsId) {
 
     card.appendChild(container);
     card.appendChild(container2);
-  })
+  }})
  }
   
 
@@ -353,8 +375,32 @@ function addCard(tableId, dataCardsId) {
   });
 }
 
-function validate(){
+function validate(emoji, names, numbers){
 
+    
+  if(emoji.length==0){
+    alert("Pick an emoji in this card!")
+    return false;
+  }
+    
+    for(let i = 0; i < names.length; i++){
+      console.log("names[i].tetxContent " + names[i].value)
+      if(names[i].value.trim() == ""){
+        alert("Input name fields can't be empty!")
+        return false;
+      }
+    }
+    for(let i =0; i < numbers.length; i++){
+      console.log("numbers[i].tetxContent " + numbers[i].value.trim())
+
+      if(numbers[i].value.trim() == "" || (!(/^\d+(\.\d+)?$/.test(numbers[i].value.trim())) && !(/^\d+(\,\d+)?$/.test(numbers[i].value.trim()))) ){
+        alert("Input number fields can't be empty and they must be positive numbers!")
+        return false;
+      } 
+    }
+  
+
+    return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///COLLECTING DATA
@@ -602,62 +648,64 @@ function graphButtons(type, graph, maxId, minId, avgId) {
 
 
   document.getElementById(maxId).addEventListener('click', () => {
+    let maxButt = document.getElementById(maxId)
+    let maxPressed = !toBoolean(maxButt.getAttribute("pressed"))
+    maxButt.setAttribute("pressed", toString(maxPressed))
+
+    let minButt = document.getElementById(minId)
+    let minPressed = toBoolean(minButt.getAttribute("pressed"))
+
+    let avgButt = document.getElementById(avgId)
+    let avgPressed = toBoolean(avgButt.getAttribute("pressed"))
+
+
+    let max = graph.data.datasets[0].data[0];
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+      if (max < graph.data.datasets[0].data[i]) {
+        max = graph.data.datasets[0].data[i];
+      }
+    }
+
+    let min = graph.data.datasets[0].data[0];
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+      if (min > graph.data.datasets[0].data[i]) {
+        min = graph.data.datasets[0].data[i];
+      }
+    }
+
+    
+   let avg = parseFloat(0);
+   for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+
+     avg += parseFloat(graph.data.datasets[0].data[i]);
+
+     if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
+       avg =  parseFloat(avg) /  parseFloat((i + 1));
+     }
+
+   }
+
+   if (maxPressed) {
+     maxButt.innerHTML =  "MAX= " + max;
+   } else {
+     maxButt.innerHTML = "MAX";
+   }
+
+   if (minPressed) {
+     minButt.innerHTML =  "MIN= " + min;
+   } else {
+     minButt.innerHTML = "MIN";
+   }
+
+   if (avgPressed) {
+     avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
+   } else {
+     avgButt.innerHTML = "AVG";
+   }
+
     graph.options.scales.y.grid.color = (ctx) => {
 
-      let maxButt = document.getElementById(maxId)
-      let maxPressed = !toBoolean(maxButt.getAttribute("pressed"))
-      maxButt.setAttribute("pressed", toString(maxPressed))
 
-      let minButt = document.getElementById(minId)
-      let minPressed = toBoolean(minButt.getAttribute("pressed"))
-
-      let avgButt = document.getElementById(avgId)
-      let avgPressed = toBoolean(avgButt.getAttribute("pressed"))
-
-
-      let max = graph.data.datasets[0].data[0];
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
-        if (max < graph.data.datasets[0].data[i]) {
-          max = graph.data.datasets[0].data[i];
-        }
-      }
-
-      let min = graph.data.datasets[0].data[0];
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
-        if (min > graph.data.datasets[0].data[i]) {
-          min = graph.data.datasets[0].data[i];
-        }
-      }
-
-      
-     let avg = parseFloat(0);
-     for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
-
-       avg += parseFloat(graph.data.datasets[0].data[i]);
-
-       if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
-         avg =  parseFloat(avg) /  parseFloat((i + 1));
-       }
-
-     }
-
-     if (maxPressed) {
-       maxButt.innerHTML =  "MAX= " + max;
-     } else {
-       maxButt.innerHTML = "MAX";
-     }
-
-     if (minPressed) {
-       minButt.innerHTML =  "MIN= " + min;
-     } else {
-       minButt.innerHTML = "MIN";
-     }
-
-     if (avgPressed) {
-       avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
-     } else {
-       avgButt.innerHTML = "AVG";
-     }
 
       if (ctx.tick.value == max && maxPressed) {
         return "green"
@@ -674,7 +722,7 @@ function graphButtons(type, graph, maxId, minId, avgId) {
   })
 
   document.getElementById(minId).addEventListener('click', () => {
-    graph.options.scales.y.grid.color = (ctx) => {
+   
 
       let maxButt = document.getElementById(maxId)
       let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
@@ -733,7 +781,7 @@ function graphButtons(type, graph, maxId, minId, avgId) {
         avgButt.innerHTML = "AVG";
       }
 
-      if (ctx.tick.value == max && maxPressed) {
+      graph.options.scales.y.grid.color = (ctx) => { if (ctx.tick.value == max && maxPressed) {
         return "green"
       } else if (ctx.tick.value == min && minPressed) {
         return 'red'
@@ -747,7 +795,6 @@ function graphButtons(type, graph, maxId, minId, avgId) {
   })
 
   document.getElementById(avgId).addEventListener('click', () => {
-    graph.options.scales.y.grid.color = (ctx) => {
       let maxButt = document.getElementById(maxId)
       let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
 
@@ -804,7 +851,8 @@ function graphButtons(type, graph, maxId, minId, avgId) {
         avgButt.innerHTML = "AVG";
       }
 
-      if (ctx.tick.value == max && maxPressed) {
+      graph.options.scales.y.grid.color = (ctx) => {
+        if (ctx.tick.value == max && maxPressed) {
         return "green"
       } else if (ctx.tick.value == min && minPressed) {
         return 'red'
