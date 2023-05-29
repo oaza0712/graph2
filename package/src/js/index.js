@@ -12,11 +12,13 @@ function setMaxEmojisGraph(num) {
   maxEmojisGraph = num;
 }
 let generatedCanvasId = 0
+let tableId = 0;
+let dataCardsId = 1000
 setMaxEmojisGraph(20);
 setEmojisPerCategory(10);
 setEmojiCategories(['food-drink']);
 
-function create_input_table(tableId, buttonId, dataCardsId) {
+function create_input_table(tableId, buttonId) {
   let tableElement = document.getElementById(tableId);
 
   let tableButtons = document.getElementById(buttonId);
@@ -117,7 +119,7 @@ function addCard(tableId, dataCardsId) {
   utilityGroup.className = 'utility-group';
   let emojiSelectorCreate = document.createElement('li');
   emojiSelectorCreate.className = 'emoji-selector';
-  emojiSelectorCreate.id = 'emojiSelector'+ dataCardsId;
+  emojiSelectorCreate.id = 'emojiSelector' + dataCardsId;
   let inputContainer = document.createElement('div');
   inputContainer.className = 'input-container';
   let emojiSearchCreate = document.createElement('input');
@@ -128,11 +130,11 @@ function addCard(tableId, dataCardsId) {
   emojiListCreate.className = "emoji-list";
   emojiListCreate.id = 'emojiList';
   let emojiSelectorIconCreate = document.createElement('li');
-  emojiSelectorIconCreate.id = "emojiSelectorIcon"+dataCardsId;
-  console.log("na postavljanju " +  emojiSelectorIconCreate.id)
+  emojiSelectorIconCreate.id = "emojiSelectorIcon" + dataCardsId;
+  console.log("na postavljanju " + emojiSelectorIconCreate.id)
   emojiSelectorIconCreate.className = "emojiSelectorIcon";
 
-  
+
   let img = document.createElement('img');
   img.setAttribute('src', 'https://upload.wikimedia.org/wikipedia/commons/9/90/Twemoji_1f600.svg');
   emojiSelectorIconCreate.appendChild(img);
@@ -165,16 +167,17 @@ function addCard(tableId, dataCardsId) {
 
   emojiSelectorIconCreate.addEventListener('click', (e) => {
     let emojiPickers = document.getElementsByClassName("emoji-selector")
-    for(let i = 0; i < emojiPickers.length; i++){
-      let emojiPickerId = emojiPickers[i].id.replace("emojiSelector","");
-      let eventId = e.target.id.replace("emojiSelectorIcon","")
-      if (emojiPickers[i].classList.contains('active') && emojiPickerId!=eventId) {
+    for (let i = 0; i < emojiPickers.length; i++) {
+      let emojiPickerId = emojiPickers[i].id.replace("emojiSelector", "");
+      let eventId = e.target.id.replace("emojiSelectorIcon", "")
+      if (emojiPickers[i].classList.contains('active') || emojiPickerId == eventId) {
+        emojiSelectorCreate.classList.toggle('active');
+
         console.log('Another element with class "active" exists');
-        return;
+
       }
     }
-   
-    emojiSelectorCreate.classList.toggle('active');
+
     var isOut = isOutOfViewport(emojiSelectorCreate);
     if (isOut.any) {
       emojiSelectorCreate.style.bottom = '-710%'
@@ -283,90 +286,92 @@ function addCard(tableId, dataCardsId) {
   cell.appendChild(card);
   row.appendChild(cell);
 
-  function addDataListener(element){
-  element.addEventListener('click', e => {
-    let buttonParrent = e.target.parentNode;
-    let card = buttonParrent.parentNode
-    
-     //VALIDATION
-     let emoji = card.getElementsByTagName('p');
-     let names =  card.getElementsByClassName('inputCard2');
-     let numbers =  card.getElementsByClassName('inputCard3');
-   
- 
-     let goodData = validate(emoji, names, numbers)
-     if(!goodData){ 
-       return;
-     } 
+  function addDataListener(element) {
+    element.addEventListener('click', e => {
+      let buttonParrent = e.target.parentNode;
+      let card = buttonParrent.parentNode
 
-    let container = document.createElement('div');
-    container.className = "container";
-    let inputCard2 = document.createElement('input');
-    inputCard2.className = "inputCard2"
-    inputCard2.setAttribute("placeHolder", "Input name");
-    container.appendChild(inputCard2);
-    let container2 = document.createElement('div');
-    container2.className = "container2";
-    let inputCard3 = document.createElement('input');
-    inputCard3.className = "inputCard3"
-    inputCard3.setAttribute("placeHolder", "Input number");
-    container2.appendChild(inputCard3);
-    addEnterListener(inputCard3)
+      //VALIDATION
+      let emoji = card.getElementsByTagName('p');
+      let names = card.getElementsByClassName('inputCard2');
+      let numbers = card.getElementsByClassName('inputCard3');
 
-    let container3 = document.createElement('div');
-    container3.className = "container2"
-    let button = document.createElement('button');
-    button.className = "addDataButton ";
-    addDataListener(button);
-    container2.appendChild(button);
 
-    card.appendChild(container);
-    card.appendChild(container2);
-  })}
+      let goodData = validate(emoji, names, numbers)
+      if (!goodData) {
+        return;
+      }
 
- function addEnterListener(element){
-  element.addEventListener('keyup', e => {
-    if (e.key === 'Enter') {
-    let buttonParrent = e.target.parentNode;
-    let card = buttonParrent.parentNode
+      let container = document.createElement('div');
+      container.className = "container";
+      let inputCard2 = document.createElement('input');
+      inputCard2.className = "inputCard2"
+      inputCard2.setAttribute("placeHolder", "Input name");
+      container.appendChild(inputCard2);
+      let container2 = document.createElement('div');
+      container2.className = "container2";
+      let inputCard3 = document.createElement('input');
+      inputCard3.className = "inputCard3"
+      inputCard3.setAttribute("placeHolder", "Input number");
+      container2.appendChild(inputCard3);
+      addEnterListener(inputCard3)
 
-    //VALIDATION
-    let emoji = card.getElementsByTagName('p');
-    let names =  card.getElementsByClassName('inputCard2');
-    let numbers =  card.getElementsByClassName('inputCard3');
- 
+      let container3 = document.createElement('div');
+      container3.className = "container2"
+      let button = document.createElement('button');
+      button.className = "addDataButton ";
+      addDataListener(button);
+      container2.appendChild(button);
 
-    let goodData = validate(emoji, names, numbers)
-    if(!goodData){
-      return;
-    }
+      card.appendChild(container);
+      card.appendChild(container2);
+    })
+  }
 
-    let container = document.createElement('div');
-    container.className = "container";
-    let inputCard2 = document.createElement('input');
-    inputCard2.className = "inputCard2"
-    inputCard2.setAttribute("placeHolder", "Input name");
-    container.appendChild(inputCard2);
-    let container2 = document.createElement('div');
-    container2.className = "container2";
-    let inputCard3 = document.createElement('input');
-    inputCard3.className = "inputCard3"
-    inputCard3.setAttribute("placeHolder", "Input number");
-    addEnterListener(inputCard3);
-    container2.appendChild(inputCard3);
+  function addEnterListener(element) {
+    element.addEventListener('keyup', e => {
+      if (e.key === 'Enter') {
+        let buttonParrent = e.target.parentNode;
+        let card = buttonParrent.parentNode
 
-    let container3 = document.createElement('div');
-    container3.className = "container2"
-    let button = document.createElement('button');
-    button.className = "addDataButton ";
-    addDataListener(button)
-    container2.appendChild(button);
+        //VALIDATION
+        let emoji = card.getElementsByTagName('p');
+        let names = card.getElementsByClassName('inputCard2');
+        let numbers = card.getElementsByClassName('inputCard3');
 
-    card.appendChild(container);
-    card.appendChild(container2);
-  }})
- }
-  
+
+        let goodData = validate(emoji, names, numbers)
+        if (!goodData) {
+          return;
+        }
+
+        let container = document.createElement('div');
+        container.className = "container";
+        let inputCard2 = document.createElement('input');
+        inputCard2.className = "inputCard2"
+        inputCard2.setAttribute("placeHolder", "Input name");
+        container.appendChild(inputCard2);
+        let container2 = document.createElement('div');
+        container2.className = "container2";
+        let inputCard3 = document.createElement('input');
+        inputCard3.className = "inputCard3"
+        inputCard3.setAttribute("placeHolder", "Input number");
+        addEnterListener(inputCard3);
+        container2.appendChild(inputCard3);
+
+        let container3 = document.createElement('div');
+        container3.className = "container2"
+        let button = document.createElement('button');
+        button.className = "addDataButton ";
+        addDataListener(button)
+        container2.appendChild(button);
+
+        card.appendChild(container);
+        card.appendChild(container2);
+      }
+    })
+  }
+
 
   deleteButton.addEventListener('click', e => {
     card.remove();
@@ -382,30 +387,30 @@ function addCard(tableId, dataCardsId) {
   });
 }
 
-function validate(emoji, names, numbers){
+function validate(emoji, names, numbers) {
 
-    
-  if(emoji.length==0){
+
+  if (emoji.length == 0) {
     alert("Pick an emoji in this card!")
     return false;
   }
-    
-    for(let i = 0; i < names.length; i++){
-      if(names[i].value.trim() == ""){
-        alert("Input name fields can't be empty!")
-        return false;
-      }
-    }
-    for(let i =0; i < numbers.length; i++){
 
-      if(numbers[i].value.trim() == "" || (!(/^\d+(\.\d+)?$/.test(numbers[i].value.trim())) && !(/^\d+(\,\d+)?$/.test(numbers[i].value.trim()))) ){
-        alert("Input number fields can't be empty and they must be positive numbers!")
-        return false;
-      } 
+  for (let i = 0; i < names.length; i++) {
+    if (names[i].value.trim() == "") {
+      alert("Input name fields can't be empty!")
+      return false;
     }
-  
+  }
+  for (let i = 0; i < numbers.length; i++) {
 
-    return true;
+    if (numbers[i].value.trim() == "" || (!(/^\d+(\.\d+)?$/.test(numbers[i].value.trim())) && !(/^\d+(\,\d+)?$/.test(numbers[i].value.trim())))) {
+      alert("Input number fields can't be empty and they must be positive numbers!")
+      return false;
+    }
+  }
+
+
+  return true;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///COLLECTING DATA
@@ -418,7 +423,7 @@ function getDataSingular() {
 
   for (let j = 0; j < cell.length; j++) {
     let cardIsEmpty = false;
-    
+
     let colorArray = [];
     let borderArray = [];
     let unicodeArray = [];
@@ -427,11 +432,11 @@ function getDataSingular() {
 
     let cards = cell[j].getElementsByClassName("card");
 
-    let colors = cards[0].getElementsByClassName('picker');
     let unicode = cards[0].getElementsByClassName('emoji-input');
     let name = cards[0].getElementsByClassName('inputCard2');
     let number = cards[0].getElementsByClassName('inputCard3');
-    
+    let colors = cards[0].getElementsByClassName('picker');
+
     for (let i = 0; i < colors.length; i++) {
       let color = window.getComputedStyle(colors[i]).backgroundColor;
       colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
@@ -442,7 +447,7 @@ function getDataSingular() {
       if (unicode[i].textContent.trim != "") {
         unicodeArray[0] = unicode[i].textContent
       } else {
-        cardIsEmpty=true;
+        cardIsEmpty = true;
       }
 
     }
@@ -450,33 +455,34 @@ function getDataSingular() {
     for (let i = 0; i < name.length; i++) {
       if (name[i].value.trim().length != 0) {
         nameArray[i] = name[i].value.trim()
-      }else{
-        cardIsEmpty=true;
+      } else {
+        cardIsEmpty = true;
       }
     }
 
     for (let i = 0; i < number.length; i++) {
       if (number[i].value.trim().length != 0) {
-        if( number[i].value.trim().replace(/,/g, ".") > maxEmojisGraph){
-          alert("Graps can't show values bigger than "+maxEmojisGraph+ ". Value bigger than 21 at card number " + (j+1) + ", input field number " + (i+1) + ".")
-           return false;
+        if (number[i].value.trim().replace(/,/g, ".") > maxEmojisGraph) {
+          alert("Graps can't show values bigger than " + maxEmojisGraph + ". Value bigger than 21 at card number " + (j + 1) + ", input field number " + (i + 1) + ".")
+          return false;
         }
         numberArray[i] = number[i].value.trim().replace(/,/g, ".")
-      }else{
-        cardIsEmpty=true;
+      } else {
+        cardIsEmpty = true;
       }
     }
-    
 
-    if(cardIsEmpty){
+
+    if (cardIsEmpty) {
       alert("Fill the empty places on cards!")
       return cardIsEmpty
-    } else{
+    } else {
       cardIsEmpty = !validate(unicode, name, number)
-      if(cardIsEmpty){
-        return cardIsEmpty}
+      if (cardIsEmpty) {
+        return cardIsEmpty
+      }
     }
-    
+
 
     let oneCardData = {
       colors: colorArray,
@@ -485,12 +491,12 @@ function getDataSingular() {
       values: numberArray,
       unicode: unicodeArray
     }
-     
+
     cardsArray[j] = oneCardData;
 
   }
 
-    return cardsArray;
+  return cardsArray;
 }
 
 
@@ -525,8 +531,8 @@ function getDataJoined() {
     for (let i = 0; i < unicode.length; i++) {
       if (unicode[i].textContent.trim != "") {
         unicodeArray[0] = unicode[i].textContent
-      } else{
-        cardIsEmpty=true;
+      } else {
+        cardIsEmpty = true;
       }
     }
 
@@ -534,8 +540,8 @@ function getDataJoined() {
     for (let i = 0; i < name.length; i++) {
       if (name[i].value.trim().length != 0) {
         nameArray[i] = name[i].value.trim()
-      }else{
-        cardIsEmpty=true;
+      } else {
+        cardIsEmpty = true;
       }
     }
 
@@ -544,18 +550,19 @@ function getDataJoined() {
       if (number[i].value.trim().length != 0) {
         numberArray[i] = number[i].value.trim()
 
-      }else{
-        cardIsEmpty=true;
+      } else {
+        cardIsEmpty = true;
       }
     }
-    
-    if(cardIsEmpty){
+
+    if (cardIsEmpty) {
       alert("Fill the empty places on cards!")
       return cardIsEmpty
-    } else{
+    } else {
       cardIsEmpty = !validate(unicode, name, number)
-      if(cardIsEmpty){
-        return cardIsEmpty}
+      if (cardIsEmpty) {
+        return cardIsEmpty
+      }
     }
 
     let newColorArray = [];
@@ -590,9 +597,9 @@ function getDataJoined() {
 
     let l = 0;
     valueArray.forEach(function (value) {
-      if( value > maxEmojisGraph){
-        alert("Graps can't show values bigger than "+maxEmojisGraph+ ". Value bigger than 21 at card number " + (j+1) + ".")
-         return false;
+      if (value > maxEmojisGraph) {
+        alert("Graps can't show values bigger than " + maxEmojisGraph + ". Value bigger than 21 at card number " + (j + 1) + ".")
+        return false;
       }
       newNumberArray[l] = value;
       l++;
@@ -604,7 +611,7 @@ function getDataJoined() {
       newBorderArray[i] = borderArray[0]
       newUnicodeArray[i] = unicodeArray[0];
     }
-    
+
     let oneCardData = {
       colors: newColorArray,
       border: newBorderArray,
@@ -621,12 +628,12 @@ function getDataJoined() {
 }
 /////////////////////////////////////////////////////////////////////////////////////////////
 //CREATING GRAPH
-function createGraphCard(type, canvasId, maxId, minId, avgId) {
+function createGraphCard(tableElement, type, canvasId, maxId, minId, avgId) {
   let body = document.getElementById('body');
   let chartCard = document.createElement('div');
   chartCard.className = "chartCard";
   let chartName = document.createElement('div');
-  chartName.innerHTML = canvasId.replace( /^\d+$/,"");
+  chartName.innerHTML = canvasId.replace(/^\d+$/, "");
   let chartBox = document.createElement('div');
   chartBox.className = "chartBox";
   let canvas = document.createElement('canvas');
@@ -655,6 +662,12 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
   let buttonDiv = document.createElement("div")
   buttonDiv.className = "buttonDiv"
 
+  let div = document.createElement("div")
+  div.className="divContainer"
+  if (type == "bar") {
+    div.appendChild(tableElement)
+
+  }
   if (type == "pie") {
 
     let div = document.createElement("div")
@@ -665,6 +678,8 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
     buttonDiv.appendChild(avgButton);
     div.appendChild(buttonDiv);
     chartCard.appendChild(div);
+    div.appendChild(tableElement)
+    
 
   } else {
     chartBox.appendChild(chartName);
@@ -679,12 +694,13 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
   let deleteButton = document.createElement("button");
   deleteButton.className = "button-2"
   deleteButton.innerHTML = "DELETE";
-  deleteButton.style.backgroundColor="#FFCCCB"
+  deleteButton.style.backgroundColor = "#FFCCCB"
   buttonDiv.appendChild(deleteButton)
   deleteButton.addEventListener('click', e => {
-    chartCard.remove();
+    div.remove();
   })
-  body.appendChild(chartCard);
+  div.appendChild(chartCard)
+  body.appendChild(div);
 }
 
 function toBoolean(value) {
@@ -726,35 +742,35 @@ function graphButtons(type, graph, maxId, minId, avgId) {
       }
     }
 
-    
-   let avg = parseFloat(0);
-   for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
 
-     avg += parseFloat(graph.data.datasets[0].data[i]);
+    let avg = parseFloat(0);
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
 
-     if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
-       avg =  parseFloat(avg) /  parseFloat((i + 1));
-     }
+      avg += parseFloat(graph.data.datasets[0].data[i]);
 
-   }
+      if (i == parseFloat(graph.data.datasets[0].data.length) - 1) {
+        avg = parseFloat(avg) / parseFloat((i + 1));
+      }
 
-   if (maxPressed) {
-     maxButt.innerHTML =  "MAX= " + max;
-   } else {
-     maxButt.innerHTML = "MAX";
-   }
+    }
 
-   if (minPressed) {
-     minButt.innerHTML =  "MIN= " + min;
-   } else {
-     minButt.innerHTML = "MIN";
-   }
+    if (maxPressed) {
+      maxButt.innerHTML = "MAX= " + max;
+    } else {
+      maxButt.innerHTML = "MAX";
+    }
 
-   if (avgPressed) {
-     avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
-   } else {
-     avgButt.innerHTML = "AVG";
-   }
+    if (minPressed) {
+      minButt.innerHTML = "MIN= " + min;
+    } else {
+      minButt.innerHTML = "MIN";
+    }
+
+    if (avgPressed) {
+      avgButt.innerHTML = "AVG= " + avg.toFixed(2);
+    } else {
+      avgButt.innerHTML = "AVG";
+    }
 
     graph.options.scales.y.grid.color = (ctx) => {
 
@@ -775,66 +791,67 @@ function graphButtons(type, graph, maxId, minId, avgId) {
   })
 
   document.getElementById(minId).addEventListener('click', () => {
-   
-
-      let maxButt = document.getElementById(maxId)
-      let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
 
 
-      let minButt = document.getElementById(minId)
-      let minPressed = !toBoolean(minButt.getAttribute("pressed"))
-      minButt.setAttribute("pressed", toString(minPressed))
+    let maxButt = document.getElementById(maxId)
+    let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
 
 
-      let avgButt = document.getElementById(avgId)
-      let avgPressed = toBoolean(avgButt.getAttribute("pressed"))
+    let minButt = document.getElementById(minId)
+    let minPressed = !toBoolean(minButt.getAttribute("pressed"))
+    minButt.setAttribute("pressed", toString(minPressed))
 
 
-      let max = graph.data.datasets[0].data[0];
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
-        if (max < graph.data.datasets[0].data[i]) {
-          max = graph.data.datasets[0].data[i];
-        }
+    let avgButt = document.getElementById(avgId)
+    let avgPressed = toBoolean(avgButt.getAttribute("pressed"))
+
+
+    let max = graph.data.datasets[0].data[0];
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+      if (max < graph.data.datasets[0].data[i]) {
+        max = graph.data.datasets[0].data[i];
+      }
+    }
+
+    let min = graph.data.datasets[0].data[0];
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+      if (min > graph.data.datasets[0].data[i]) {
+        min = graph.data.datasets[0].data[i];
+      }
+    }
+
+
+    let avg = parseFloat(0);
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+
+      avg += parseFloat(graph.data.datasets[0].data[i]);
+
+      if (i == parseFloat(graph.data.datasets[0].data.length) - 1) {
+        avg = parseFloat(avg) / parseFloat((i + 1));
       }
 
-      let min = graph.data.datasets[0].data[0];
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
-        if (min > graph.data.datasets[0].data[i]) {
-          min = graph.data.datasets[0].data[i];
-        }
-      }
+    }
 
+    if (maxPressed) {
+      maxButt.innerHTML = "MAX= " + max;
+    } else {
+      maxButt.innerHTML = "MAX";
+    }
 
-      let avg = parseFloat(0);
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+    if (minPressed) {
+      minButt.innerHTML = "MIN= " + min;
+    } else {
+      minButt.innerHTML = "MIN";
+    }
 
-        avg += parseFloat(graph.data.datasets[0].data[i]);
+    if (avgPressed) {
+      avgButt.innerHTML = "AVG= " + avg.toFixed(2);
+    } else {
+      avgButt.innerHTML = "AVG";
+    }
 
-        if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
-          avg =  parseFloat(avg) /  parseFloat((i + 1));
-        }
-
-      }
-
-      if (maxPressed) {
-        maxButt.innerHTML =  "MAX= " + max;
-      } else {
-        maxButt.innerHTML = "MAX";
-      }
-
-      if (minPressed) {
-        minButt.innerHTML =  "MIN= " + min;
-      } else {
-        minButt.innerHTML = "MIN";
-      }
-
-      if (avgPressed) {
-        avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
-      } else {
-        avgButt.innerHTML = "AVG";
-      }
-
-      graph.options.scales.y.grid.color = (ctx) => { if (ctx.tick.value == max && maxPressed) {
+    graph.options.scales.y.grid.color = (ctx) => {
+      if (ctx.tick.value == max && maxPressed) {
         return "green"
       } else if (ctx.tick.value == min && minPressed) {
         return 'red'
@@ -848,64 +865,64 @@ function graphButtons(type, graph, maxId, minId, avgId) {
   })
 
   document.getElementById(avgId).addEventListener('click', () => {
-      let maxButt = document.getElementById(maxId)
-      let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
+    let maxButt = document.getElementById(maxId)
+    let maxPressed = toBoolean(maxButt.getAttribute("pressed"))
 
 
-      let minButt = document.getElementById(minId)
-      let minPressed = toBoolean(minButt.getAttribute("pressed"))
+    let minButt = document.getElementById(minId)
+    let minPressed = toBoolean(minButt.getAttribute("pressed"))
 
 
-      let avgButt = document.getElementById(avgId)
-      let avgPressed = !toBoolean(avgButt.getAttribute("pressed"))
-      avgButt.setAttribute("pressed", toString(avgPressed))
+    let avgButt = document.getElementById(avgId)
+    let avgPressed = !toBoolean(avgButt.getAttribute("pressed"))
+    avgButt.setAttribute("pressed", toString(avgPressed))
 
 
-      let max = graph.data.datasets[0].data[0];
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
-        if (max < graph.data.datasets[0].data[i]) {
-          max = graph.data.datasets[0].data[i];
-        }
+    let max = graph.data.datasets[0].data[0];
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+      if (max < graph.data.datasets[0].data[i]) {
+        max = graph.data.datasets[0].data[i];
+      }
+    }
+
+    let min = graph.data.datasets[0].data[0];
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+      if (min > graph.data.datasets[0].data[i]) {
+        min = graph.data.datasets[0].data[i];
+      }
+    }
+
+    let avg = parseFloat(0);
+    for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+
+      avg += parseFloat(graph.data.datasets[0].data[i]);
+
+      if (i == parseFloat(graph.data.datasets[0].data.length) - 1) {
+        avg = parseFloat(avg) / parseFloat((i + 1));
       }
 
-      let min = graph.data.datasets[0].data[0];
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
-        if (min > graph.data.datasets[0].data[i]) {
-          min = graph.data.datasets[0].data[i];
-        }
-      }
+    }
 
-     let avg = parseFloat(0);
-      for (let i = 0; i < graph.data.datasets[0].data.length; i++) {
+    if (maxPressed) {
+      maxButt.innerHTML = "MAX= " + max;
+    } else {
+      maxButt.innerHTML = "MAX";
+    }
 
-        avg += parseFloat(graph.data.datasets[0].data[i]);
+    if (minPressed) {
+      minButt.innerHTML = "MIN= " + min;
+    } else {
+      minButt.innerHTML = "MIN";
+    }
 
-        if (i ==parseFloat( graph.data.datasets[0].data.length) - 1) {
-          avg =  parseFloat(avg) /  parseFloat((i + 1));
-        }
+    if (avgPressed) {
+      avgButt.innerHTML = "AVG= " + avg.toFixed(2);
+    } else {
+      avgButt.innerHTML = "AVG";
+    }
 
-      }
-
-      if (maxPressed) {
-        maxButt.innerHTML =  "MAX= " + max;
-      } else {
-        maxButt.innerHTML = "MAX";
-      }
-
-      if (minPressed) {
-        minButt.innerHTML =  "MIN= " + min;
-      } else {
-        minButt.innerHTML = "MIN";
-      }
-
-      if (avgPressed) {
-        avgButt.innerHTML =  "AVG= " + avg.toFixed(2);
-      } else {
-        avgButt.innerHTML = "AVG";
-      }
-
-      graph.options.scales.y.grid.color = (ctx) => {
-        if (ctx.tick.value == max && maxPressed) {
+    graph.options.scales.y.grid.color = (ctx) => {
+      if (ctx.tick.value == max && maxPressed) {
         return "green"
       } else if (ctx.tick.value == min && minPressed) {
         return 'red'
@@ -924,11 +941,11 @@ function addLinePictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     for (let i = 0; i < temp.length; i++) {
-       
+
 
       let line = {
         type: "line",
@@ -957,7 +974,7 @@ function addLineTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     for (let i = 0; i < temp.length; i++) {
@@ -986,7 +1003,7 @@ function addLineChartListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataSingular();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
 
@@ -1013,15 +1030,200 @@ function addLineChartListener(buttonId) {
     }
   });
 }
+function addReadCard(tableId, dataCardsId, name, number) {
+  let dataCard = document.getElementById(tableId);
+  let row = dataCard.getElementsByClassName("readRow");
 
+  let cell = document.createElement('div');
+  cell.className = "cell";
+
+  let card = document.createElement('div');
+  card.className = "card";
+  let header = document.createElement('div');
+  header.className = "header";
+  let inputCard1 = document.createElement('div');
+  inputCard1.className = "inputCard1"
+  let chatContainer = document.createElement('div');
+  chatContainer.className = 'chat-container';
+  let chatUtilities = document.createElement('div');
+  chatUtilities.className = 'chat-utilities';
+  let utilityContainer = document.createElement('div');
+  utilityContainer.className = 'utility-container';
+  let utilityGroup = document.createElement('ul');
+  utilityGroup.className = 'utility-group';
+  let emojiSelectorCreate = document.createElement('li');
+  emojiSelectorCreate.className = 'emoji-selector';
+  emojiSelectorCreate.id = 'emojiSelector' + dataCardsId;
+  let inputContainer = document.createElement('div');
+  inputContainer.className = 'input-container';
+  let emojiSearchCreate = document.createElement('input');
+  emojiSearchCreate.id = 'emojiSearch';
+  emojiSearchCreate.setAttribute("type", "text");
+  emojiSearchCreate.setAttribute("placeholder", "Search...");
+  let emojiListCreate = document.createElement('ul');
+  emojiListCreate.className = "emoji-list";
+  emojiListCreate.id = 'emojiList';
+  let emojiSelectorIconCreate = document.createElement('li');
+  emojiSelectorIconCreate.id = "emojiSelectorIcon" + dataCardsId;
+  console.log("na postavljanju " + emojiSelectorIconCreate.id)
+  emojiSelectorIconCreate.className = "emojiSelectorIcon";
+
+
+  let img = document.createElement('img');
+  img.setAttribute('src', 'https://upload.wikimedia.org/wikipedia/commons/9/90/Twemoji_1f600.svg');
+  emojiSelectorIconCreate.appendChild(img);
+  inputContainer.appendChild(emojiSearchCreate);
+  emojiSelectorCreate.appendChild(inputContainer);
+  emojiSelectorCreate.appendChild(emojiListCreate);
+  utilityGroup.appendChild(emojiSelectorCreate);
+  utilityGroup.appendChild(emojiSelectorIconCreate);
+  utilityContainer.appendChild(utilityGroup);
+  chatUtilities.appendChild(utilityContainer);
+  chatContainer.appendChild(chatUtilities);
+  header.appendChild(chatContainer);
+  //ADDING COLORPICKER
+  let colorPicker = document.createElement('div');
+  colorPicker.className = 'picker'
+  colorPicker.id = dataCardsId;
+  header.appendChild(colorPicker);
+  //CHECKING IF POP UP IS IN VIEWPORT
+  var isOutOfViewport = function (elem) {
+    var bounding = elem.getBoundingClientRect();
+    var out = {};
+    out.top = bounding.top < 0;
+    out.left = bounding.left < 0;
+    out.bottom = bounding.bottom > (window.innerHeight || document.documentElement.clientHeight);
+    out.right = bounding.right > (window.innerWidth || document.documentElement.clientWidth);
+    out.any = out.top || out.left || out.bottom || out.right;
+    out.all = out.top && out.left && out.bottom && out.right;
+    return out;
+  };
+
+  emojiSelectorIconCreate.addEventListener('click', (e) => {
+    let emojiPickers = document.getElementsByClassName("emoji-selector")
+    for (let i = 0; i < emojiPickers.length; i++) {
+      let emojiPickerId = emojiPickers[i].id.replace("emojiSelector", "");
+      let eventId = e.target.id.replace("emojiSelectorIcon", "")
+      if (emojiPickers[i].classList.contains('active') || emojiPickerId == eventId) {
+        emojiSelectorCreate.classList.toggle('active');
+
+        console.log('Another element with class "active" exists');
+
+      }
+    }
+
+    var isOut = isOutOfViewport(emojiSelectorCreate);
+    if (isOut.any) {
+      emojiSelectorCreate.style.bottom = '-710%'
+    }
+  });
+
+
+  //LOADING EMOJIS
+  fetch('https://emoji-api.com/emojis?access_key=329dfe7d47ca9bf032e6959bd2692f5624520d19').then(res => res.json()).then(data => loadEmoji(data, emojiCategories, EmojisPerCategory));
+  function loadEmoji(data, emojiCategories, EmojisPerCategory) {
+    let counter = 0;
+    let previousCategory;
+    let currentCategory;
+    let first = true;
+    let emojiCodePoints = new Set()
+    data.forEach(emoji => {
+      if (!emojiCodePoints.has(emoji.codePoint)) {
+        if (first) {
+          previousCategory = emoji.group;
+          first = false;
+        }
+        let li = document.createElement('li');
+        li.setAttribute('emoji-name', emoji.slug)
+        li.textContent = emoji.character;
+        let currentCategory = emoji.group;
+        if (previousCategory == currentCategory) {
+          counter++;
+        } else {
+          counter = 1;
+        }
+        if (emojiCategories.includes(emoji.group) && counter <= EmojisPerCategory) {
+          li.addEventListener('click', () => {
+            emojiSelectorIconCreate.style.display = "none";
+            let emojiInputExists = utilityGroup.getElementsByTagName('p').length;
+            //DISABLE INPUTING MULTIPLE EMOJIS IN ONE CARD
+            if (emojiInputExists) {
+              utilityGroup.getElementsByTagName('p')[0].remove();
+            }
+            let emojiInput = document.createElement('p');
+            emojiInput.textContent = emoji.character;
+            emojiInput.className = "emoji-input";
+            emojiSelectorCreate.classList.toggle('active');
+            emojiInput.addEventListener('click', () => {
+              emojiSelectorCreate.classList.toggle('active');
+              var isOut = isOutOfViewport(emojiSelectorCreate);
+              if (isOut.any) {
+                emojiSelectorCreate.style.bottom = '-710%'
+              }
+            });
+            utilityGroup.appendChild(emojiInput);
+          });
+          emojiListCreate.appendChild(li);
+          previousCategory = currentCategory;
+        }
+        emojiCodePoints.add(emoji.codePoint)
+      }
+    });
+  }
+  //SEARCHING EMOJIS
+  emojiSearchCreate.addEventListener('keyup', e => {
+    let value = e.target.value;
+    let emojis = document.querySelectorAll('#emojiList li');
+    emojis.forEach(emoji => {
+      if (emoji.getAttribute('emoji-name').toLowerCase().includes(value)) {
+        emoji.style.display = 'flex';
+      } else {
+        emoji.style.display = 'none';
+      }
+    })
+  })
+  //MAKING CARDS FOR NUMBER AND TEXT INPUT
+  let container = document.createElement('div');
+  container.className = "container";
+
+  let inputCard2 = document.createElement('p');
+  inputCard2.className = "inputCard2"
+  inputCard2.textContent = name;
+  container.appendChild(inputCard2);
+  let container2 = document.createElement('div');
+  container2.className = "container2";
+  let inputCard3 = document.createElement('p');
+  inputCard3.className = "inputCard3"
+  inputCard3.textContent = number;
+  container2.appendChild(inputCard3);
+
+  let container3 = document.createElement('div');
+  container3.className = "container2"
+
+  card.appendChild(header);
+  card.appendChild(container);
+  card.appendChild(container2);
+  cell.appendChild(card);
+  row[0].appendChild(cell);
+
+
+  $('#' + dataCardsId).colorPick({
+    'initialColor': '#8e44ad',
+    'palette': ["#1abc9c", "#16a085", "#2ecc71", "#27ae60", "#3498db", "#2980b9", "#9b59b6", "#8e44ad", "#34495e", "#2c3e50", "#f1c40f", "#f39c12", "#e67e22", "#d35400", "#e74c3c", "#c0392b", "#ecf0f1"],
+    'onColorSelected': function () {
+      this.element.css({ 'backgroundColor': this.color, 'color': this.color });
+    }
+  });
+}
 function addBarPictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     document.getElementsByClassName("barPictogram ");
+
     for (let i = 0; i < temp.length; i++) {
 
 
@@ -1036,20 +1238,101 @@ function addBarPictogramListener(buttonId) {
 
       let graph;
 
-      createGraphCard("bar", "barPictogram " + generatedCanvasId.toString(), "barPictogramMax" + generatedCanvasId.toString(), "barPictogramMin" + generatedCanvasId.toString(), "barPictogramAvg" + generatedCanvasId.toString())
-      graph = KidChart('barPictogram', line, "barPictogram " + generatedCanvasId.toString());
+      let tableElement = document.createElement("div");
+      let dataCard = document.createElement('div');
+      dataCard.className = 'dataCards';
+      dataCard.id = tableId;
+      let row = document.createElement('div');
+      row.className = 'readRow';
 
-      graphButtons("bar", graph, "barPictogramMax" + generatedCanvasId.toString(), "barPictogramMin" + generatedCanvasId.toString(), "barPictogramAvg" + generatedCanvasId.toString())
-      generatedCanvasId++;
+      dataCard.appendChild(row);
+      tableElement.appendChild(dataCard);
+      body.append(tableElement)
+
+      for (let j = 0; j < temp[i].values.length; j++) {
+        addReadCard(tableId, dataCardsId, temp[i].labels[j], temp[i].values[j]);
+       
+        dataCardsId++;
+      }
+
+      let button = document.createElement('button');
+      button.className = 'button-2';
+      button.innerHTML = "Create graph"
+      row.appendChild(button);
+      let o = tableId
+      button.addEventListener('click', function (event) {
+        
+       let res = getData(o)
+        let line = {
+          type: "bar",
+          color: res.colors,
+          border:res.border,
+          labels: res.labels,
+          values: res.values,
+          unicode: res.unicode,
+        };
+        createGraphCard(tableElement,"bar", "barPictogram " + generatedCanvasId.toString(), "barPictogramMax" + generatedCanvasId.toString(), "barPictogramMin" + generatedCanvasId.toString(), "barPictogramAvg" + generatedCanvasId.toString())
+        graph = KidChart('barPictogram', line, "barPictogram " + generatedCanvasId.toString());
+
+        graphButtons("bar", graph, "barPictogramMax" + generatedCanvasId.toString(), "barPictogramMin" + generatedCanvasId.toString(), "barPictogramAvg" + generatedCanvasId.toString())
+        generatedCanvasId++;
+        button.remove();
+      })
+      tableId++;
+
+
     }
   });
 }
+function getData(tableId) {
+  let rows
+  let table = document.getElementById(tableId);
+  let unicode = table.getElementsByClassName('emoji-input');
+  let unicodeArray = [];
+  for (let i = 0; i < unicode.length; i++) {
+    if (unicode[i].textContent.trim != "") {
+      unicodeArray[i] = unicode[i].textContent
+    } else{
+      alert("Pick an emoji!")
+      return;
+    }
+  }
+  let name = table.getElementsByClassName('inputCard2');
+  let nameArray = [];
+  for (let i = 0; i < name.length; i++) {
+    if (name[i].textContent.length != 0) {
+      nameArray[i] = name[i].textContent
+    }
+  }
+  let number = table.getElementsByClassName('inputCard3');
+  let numberArray = [];
+  for (let i = 0; i < number.length; i++) {
+    if (number[i].textContent.length != 0) {
+      numberArray[i] = number[i].textContent
+    }
+  }
+  let colors = table.getElementsByClassName('picker');
+  let colorArray = [];
+  let borderArray = [];
 
+    for (let i = 0; i < colors.length; i++) {
+      let color = window.getComputedStyle(colors[i]).backgroundColor;
+      colorArray[i] = color.replace(')', ', 0.75)').replace('rgb', 'rgba');
+      borderArray[i] = color.replace(')', ', 0.8)').replace('rgb', 'rgba');
+    }
+  return {
+    colors:colorArray,
+    border: borderArray,
+    labels: nameArray,
+    values: numberArray,
+    unicode: unicodeArray
+  }
+}
 function addBarTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     document.getElementsByClassName("barTransition ");
@@ -1080,7 +1363,7 @@ function addBarChartListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     document.getElementsByClassName("barChart ");
@@ -1110,7 +1393,7 @@ function addPiePictogramListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     document.getElementsByClassName("piePictogram ");
@@ -1141,7 +1424,7 @@ function addPieTransitionListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     document.getElementsByClassName("pieTransition ");
@@ -1172,7 +1455,7 @@ function addPieChartListener(buttonId) {
   const button = document.getElementById(buttonId);
   button.addEventListener('click', (event) => {
     let temp = getDataJoined();
-    if(typeof temp === 'boolean'){
+    if (typeof temp === 'boolean') {
       return;
     }
     document.getElementsByClassName("pieChart ");
@@ -1215,7 +1498,7 @@ function KidChart(typeOfChart, userData, canvasId) {
     ],
   };
   if (typeOfChart == "barPictogram" || typeOfChart == "piePictogram") {
-    
+
     var data = {
       labels: userData.labels,
       datasets: [
@@ -1295,7 +1578,7 @@ function KidChart(typeOfChart, userData, canvasId) {
           }
           let a = 0.5 * size * 0.5 * size;
           let b = max_width * max_width;
-          let radius = (width / 2 - Math.ceil(Math.sqrt(a + b / 4)))-5;
+          let radius = (width / 2 - Math.ceil(Math.sqrt(a + b / 4))) - 5;
           for (let j = 0; j < Math.floor(userData.values[i]); j++) {
 
             ctx.font = `${size}px Arial`;
@@ -1390,7 +1673,7 @@ function KidChart(typeOfChart, userData, canvasId) {
 
   if (typeOfChart == "pieChart" || typeOfChart == "pieTransition" || typeOfChart == "piePictogram") {
     display = true;
-    scales =    {
+    scales = {
       x: {
         display: false,
         grid: {
@@ -1405,9 +1688,9 @@ function KidChart(typeOfChart, userData, canvasId) {
       }
     };
   }
-  
 
-  
+
+
   // config
   const config = {
     type: userData.type,
