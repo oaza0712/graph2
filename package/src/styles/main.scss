@@ -33,6 +33,7 @@ body {
   padding: 1.5rem 1rem 1rem;
   height: 206px;
 }
+
 .chat-utilities .utility-container {
   display: flex;
   flex-direction: row;
@@ -41,6 +42,7 @@ body {
   align-items: center;
   gap: 0.5rem;
 }
+
 .chat-utilities .utility-container ul {
   display: flex;
   flex-direction: row;
@@ -51,6 +53,7 @@ body {
   background-color: #eee;
   position: relative;
 }
+
 .chat-utilities .utility-container ul li {
   height: 50px;
   width: 50px;
@@ -65,13 +68,16 @@ body {
   padding: 1rem;
   overflow: hidden;
 }
+
 .chat-utilities .utility-container ul li:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
 .chat-utilities .utility-container ul li img {
   height: 100%;
   opacity: 0.8;
 }
+
 .chat-utilities .utility-container ul li.emoji-selector {
   background-color: white;
   border-radius: 1rem;
@@ -89,11 +95,13 @@ body {
   overflow: auto;
   transition: bottom 0.3s ease, opacity 0.3s ease;
 }
+
 .chat-utilities .utility-container ul li.emoji-selector.active {
   bottom: 110%;
   opacity: 1;
   pointer-events: all;
 }
+
 .chat-utilities .utility-container ul li.emoji-selector .input-container {
   padding: 1rem;
   background-color: white;
@@ -101,6 +109,7 @@ body {
   top: 0;
   z-index: 5;
 }
+
 .chat-utilities .utility-container ul li.emoji-selector .input-container input {
   border-radius: 25px;
   border: 1px solid #eee;
@@ -108,6 +117,7 @@ body {
   padding: 0.5rem 1rem;
   outline: none;
 }
+
 .chat-utilities .utility-container ul li.emoji-selector ul.emoji-list {
   background-color: white;
   display: flex;
@@ -118,12 +128,14 @@ body {
   padding: 0 1rem 1rem;
   border-radius: 0;
 }
+
 .chat-utilities .utility-container ul li.emoji-selector ul.emoji-list li {
   height: 35px;
   width: 35px;
   border-radius: 0.25rem;
   font-size: 1.5rem;
 }
+
 .chat-utilities form {
   display: flex;
   flex-direction: row;
@@ -135,12 +147,14 @@ body {
   overflow: hidden;
   width: 100%;
 }
+
 .chat-utilities form input, .chat-utilities form button {
   outline: none;
   border: none;
   padding: 0.5rem;
   height: 50px;
 }
+
 .chat-utilities form input {
   background-color: transparent;
   width: 100%;
@@ -148,6 +162,7 @@ body {
   font-size: 1.2rem;
   color: rgb(59, 69, 84);
 }
+
 .chat-utilities form button {
   background-color: rgb(111, 109, 226);
   border-radius: 25px;
@@ -162,21 +177,23 @@ body {
   padding: 0 2rem;
   color: white;
 }
+
 .chat-utilities form button img {
   filter: invert(1);
   margin-left: 1rem;
   width: 1.2rem;
 }
+
 .picker {
   border-radius: 5px;
   width: 36px;
   height: 36px;
   cursor: pointer;
-  -webkit-transition: all linear .2s;
-  -moz-transition: all linear .2s;
-  -ms-transition: all linear .2s;
-  -o-transition: all linear .2s;
-  transition: all linear .2s;
+  -webkit-transition: all linear 0.2s;
+  -moz-transition: all linear 0.2s;
+  -ms-transition: all linear 0.2s;
+  -o-transition: all linear 0.2s;
+  transition: all linear 0.2s;
   border: thin solid #eee;
 }
 
@@ -187,7 +204,7 @@ body {
 }
 
 .chartMenu {
-  width: 100vw;
+  width: 100%;
   height: 40px;
   background: #1a1a1a;
   color: rgba(54, 162, 235, 1);
@@ -198,10 +215,14 @@ body {
   font-size: 20px;
 }
 
+.divContainer{
+  width:100%
+}
+
 .chartCard {
-  width: 300px;
-  height: 100px;
-  background: rgba(54, 162, 235, 0.2);
+  width: 100%;
+  height: 30%;
+  background: rgba(229, 244, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,13 +230,10 @@ body {
 
 .chartBox {
   width: 100%;
-
-  max-width: 300px;
-    height: auto;
-
+  max-width: 700px;
   padding: 20px;
   border-radius: 20px;
-  border: solid 3px rgb(54, 235, 114);
+  border: solid 3px rgba(54, 162, 235, 1);
   background: white;
 }
 
@@ -226,81 +244,76 @@ td {
   box-shadow: 10px 10px 5px lightblue;
 }
 
-
-/* CSS */
-#tableButtons {
+.tableButtonDiv{
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
 
 }
 
-.button-85 {
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0.6em 2em;
-  border: none;
-  outline: none;
-  color: rgb(99, 196, 215);
-  background: #ffffff;
+.buttonDiv{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+
+}
+
+/* CSS */
+.button-2 {
+  background-color: rgba(51, 51, 51, 0.05);
+  border-radius: 8px;
+  border-width: 0;
+  color: #333333;
   cursor: pointer;
-  position: relative;
-  z-index: 0;
-  border-radius: 100%;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  margin: 3px;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
 }
-
-.button-85:before {
-  content: "";
-  background: linear-gradient(45deg,
-      #ff0000,
-      #ff7300,
-      #fffb00,
-      #48ff00,
-      #00ffd5,
-      #002bff,
-      #7a00ff,
-      #ff00c8,
-      #ff0000);
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  background-size: 200%;
-  z-index: -1;
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  animation: glowing-button-85 20s linear infinite;
-  transition: opacity 0.3s ease-in-out;
-  border-radius: 5%;
+.button-3 {
+  align-self: center;
+  height: 60px;
+  background-color: rgba(51, 51, 51, 0.05);
+  border-radius: 8px;
+  border-width: 0;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  text-align: center;
+  transition: all 200ms;
+  vertical-align: baseline;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+/* CSS */
+#tableButtons {
+  display: flex;
 }
 
-@keyframes glowing-button-85 {
-  0% {
-    background-position: 0 0;
-  }
-
-  50% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: 0 0;
-  }
-}
-
-.button-85:after {
-  z-index: -1;
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
-  left: 0;
-  top: 0;
-  border-radius: 5%;
-}
 
 div.dataCards {
   max-width: 100%;
@@ -308,13 +321,17 @@ div.dataCards {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-
 }
 
 .row {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: space-around;
+}
+.readRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 div.card {
@@ -322,7 +339,6 @@ div.card {
   text-align: center;
   margin: 10px;
   flex-basis: 20%;
-
 }
 
 div.header {
@@ -331,37 +347,42 @@ div.header {
   color: rgb(0, 0, 0);
   padding: 10px;
   font-size: 40px;
-  border: 10px rgba(54, 162, 235, 1);
+  border: 10px rgb(54, 162, 235);
   display: flex;
   justify-content: center;
   align-items: center;
+  border-left: 2px solid rgb(86, 160, 209);
+  border-right: 2px solid rgb(86, 160, 209);
+  border-top: 2px solid  rgb(86, 160, 209);
 }
 
 div.chat-utilities {
   height: min-content;
   border-top-style: hidden !important;
   background-color: #f6ffff;
-
 }
 
 div.container {
   height: 40px;
   padding: 10px;
   background-color: #E6FEFF;
+  border-left: 2px solid rgb(86, 160, 209);
+  border-right: 2px solid rgb(86, 160, 209);
+  border-top: 2px solid  rgb(86, 160, 209);
 }
 
 div.container2 {
   height: 40px;
   padding: 10px;
   background-color: #D9F6FF;
-
+  border-left: 2px solid rgb(86, 160, 209);
+  border-right: 2px solid rgb(86, 160, 209);
 }
+
 div.container3 {
   height: 40px;
   padding: 10px;
   background-color: #D9F6FF;
-
-
 }
 
 .inputCard1 {
@@ -387,7 +408,6 @@ div.container3 {
   outline: none;
   background-color: #E6FEFF;
   text-align: center;
-
 }
 
 .inputCard3 {
@@ -400,7 +420,6 @@ div.container3 {
   outline: none;
   background-color: #D9F6FF;
   text-align: center;
-
 }
 
 .deleteButton {
@@ -443,6 +462,48 @@ div.container3 {
   transform: rotate(45deg);
 }
 
+.chartDeleteButton {
+  border-radius: 50%;
+  padding: 0.5em;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgb(86, 160, 209);
+  color: rgb(86, 160, 209);
+  position: relative;
+}
+
+.chartDeleteButton:hover {
+  border: 3px solid rgb(86, 160, 209);
+  background-color: #eee;
+  color: #ffffff;
+}
+
+.chartDeleteButton::before {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  width: 1px;
+  left: 6px;
+  top: 3px;
+  bottom: 3px;
+  transform: rotate(45deg);
+  margin: 0 auto; 
+}
+
+.chartDeleteButton::after {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  height: 1px;
+  top: 6px;
+  left: 3px;
+  right: 3px;
+  transform: rotate(45deg);
+  margin: 0 auto; 
+}
+
 .addDataButton {
   border-radius: 50%;
   padding: 0.5em;
@@ -482,4 +543,4 @@ div.container3 {
   right: 2.5px;
   transform: rotate(90deg);
 }
-/*# sourceMappingURL=styles.css.map */
+

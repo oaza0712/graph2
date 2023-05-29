@@ -1,6 +1,6 @@
 {
   "name": "@oasis07/graph2",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "module": "dist/@oasis07/data.esm.min.js",
   "browser": "dist/@oasis07/data.umd.min.js",
   "main": "dist/@oasis07/data.esm.min.js",
