@@ -169,16 +169,15 @@ function addCard(tableId, dataCardsId) {
       let emojiPickerId = emojiPickers[i].id.replace("emojiSelector","");
       let eventId = e.target.id.replace("emojiSelectorIcon","")
       if (emojiPickers[i].classList.contains('active') && emojiPickerId!=eventId) {
-        emojiPickers[i].classList.toggle('active');
         console.log('Another element with class "active" exists');
-        
+        return;
       }
     }
    
-    e.target.classList.toggle('active');
+    emojiSelectorCreate.classList.toggle('active');
     var isOut = isOutOfViewport(emojiSelectorCreate);
     if (isOut.any) {
-      e.target.style.bottom = '-710%'
+      emojiSelectorCreate.style.bottom = '-710%'
     }
   });
 
