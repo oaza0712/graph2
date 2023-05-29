@@ -1186,15 +1186,15 @@ function addReadCard(tableId, dataCardsId, name, number) {
   let container = document.createElement('div');
   container.className = "container";
 
-  let inputCard2 = document.createElement('p');
+  let inputCard2 = document.createElement('span');
   inputCard2.className = "inputCard2"
-  inputCard2.textContent = name;
+  inputCard2.textContent = "name: "+name;
   container.appendChild(inputCard2);
   let container2 = document.createElement('div');
   container2.className = "container2";
-  let inputCard3 = document.createElement('p');
+  let inputCard3 = document.createElement('span');
   inputCard3.className = "inputCard3"
-  inputCard3.textContent = number;
+  inputCard3.textContent = "number: "+number;
   container2.appendChild(inputCard3);
 
   let container3 = document.createElement('div');
@@ -1256,13 +1256,17 @@ function addBarPictogramListener(buttonId) {
       }
 
       let button = document.createElement('button');
-      button.className = 'button-2';
+      button.className = 'button-3';
       button.innerHTML = "Create graph"
       row.appendChild(button);
       let o = tableId
       button.addEventListener('click', function (event) {
         
        let res = getData(o)
+       if (typeof res === 'boolean') {
+        alert("Pick all of the emojis!")
+        return;
+      }
         let line = {
           type: "bar",
           color: res.colors,
@@ -1287,30 +1291,30 @@ function addBarPictogramListener(buttonId) {
 function getData(tableId) {
   let rows
   let table = document.getElementById(tableId);
+  let getEmojis = table.getElementsByTagName('p');
+  if(getEmojis.length==0){
+    return false
+  }
   let unicode = table.getElementsByClassName('emoji-input');
   let unicodeArray = [];
   for (let i = 0; i < unicode.length; i++) {
-    if (unicode[i].textContent.trim != "") {
+    if (unicode[i].length != 0) {
       unicodeArray[i] = unicode[i].textContent
-    } else{
-      alert("Pick an emoji!")
-      return;
     }
   }
   let name = table.getElementsByClassName('inputCard2');
   let nameArray = [];
   for (let i = 0; i < name.length; i++) {
     if (name[i].textContent.length != 0) {
-      nameArray[i] = name[i].textContent
+      nameArray[i] = name[i].textContent.replace("name: ","")
     }
   }
   let number = table.getElementsByClassName('inputCard3');
   let numberArray = [];
   for (let i = 0; i < number.length; i++) {
     if (number[i].textContent.length != 0) {
-      numberArray[i] = number[i].textContent
-    }
-  }
+      numberArray[i] = number[i].textContent.replace("number: ","")
+  }}
   let colors = table.getElementsByClassName('picker');
   let colorArray = [];
   let borderArray = [];
