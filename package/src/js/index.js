@@ -117,7 +117,7 @@ function addCard(tableId, dataCardsId) {
   utilityGroup.className = 'utility-group';
   let emojiSelectorCreate = document.createElement('li');
   emojiSelectorCreate.className = 'emoji-selector';
-  emojiSelectorCreate.id = 'emojiSelector';
+  emojiSelectorCreate.id = 'emojiSelector'+ dataCardsId;
   let inputContainer = document.createElement('div');
   inputContainer.className = 'input-container';
   let emojiSearchCreate = document.createElement('input');
@@ -128,7 +128,8 @@ function addCard(tableId, dataCardsId) {
   emojiListCreate.className = "emoji-list";
   emojiListCreate.id = 'emojiList';
   let emojiSelectorIconCreate = document.createElement('li');
-  emojiSelectorIconCreate.id = "emojiSelectorIcon";
+  emojiSelectorIconCreate.id = "emojiSelectorIcon"+dataCardsId;
+  console.log("na postavljanju " +  emojiSelectorIconCreate.id)
   emojiSelectorIconCreate.className = "emojiSelectorIcon";
 
   
@@ -161,14 +162,23 @@ function addCard(tableId, dataCardsId) {
     out.all = out.top && out.left && out.bottom && out.right;
     return out;
   };
-  emojiSelectorIconCreate.addEventListener('click', () => {
-    /*let emojiPickers = document.getElementsByClassName("emojiSelectorIcon")
-    for(let i = 0; i < emojiPickers.length;i++){}
-   */
-    emojiSelectorCreate.classList.toggle('active');
+
+  emojiSelectorIconCreate.addEventListener('click', (e) => {
+    let emojiPickers = document.getElementsByClassName("emoji-selector")
+    for(let i = 0; i < emojiPickers.length; i++){
+      let emojiPickerId = emojiPickers[i].id.replace("emojiSelector","");
+      let eventId = e.target.id.replace("emojiSelectorIcon","")
+      if (emojiPickers[i].classList.contains('active') && emojiPickerId!=eventId) {
+        emojiPickers[i].classList.toggle('active');
+        console.log('Another element with class "active" exists');
+        
+      }
+    }
+   
+    e.target.classList.toggle('active');
     var isOut = isOutOfViewport(emojiSelectorCreate);
     if (isOut.any) {
-      emojiSelectorCreate.style.bottom = '-710%'
+      e.target.style.bottom = '-710%'
     }
   });
 
