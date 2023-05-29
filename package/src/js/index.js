@@ -958,7 +958,7 @@ function addLinePictogramListener(buttonId) {
 
       let graph;
 
-      createGraphCard("line", "linePictogram " + generatedCanvasId.toString(), "linePictogramMax" + generatedCanvasId.toString(), "linePictogramMin" + generatedCanvasId.toString(), "linePictogramAvg" + generatedCanvasId.toString())
+      createGraphCard(null,"line", "linePictogram " + generatedCanvasId.toString(), "linePictogramMax" + generatedCanvasId.toString(), "linePictogramMin" + generatedCanvasId.toString(), "linePictogramAvg" + generatedCanvasId.toString())
       graph = KidChart('linePictogram', line, "linePictogram " + generatedCanvasId.toString());
 
       graphButtons("line", graph, "linePictogramMax" + generatedCanvasId.toString(), "linePictogramMin" + generatedCanvasId.toString(), "linePictogramAvg" + generatedCanvasId.toString())
@@ -990,7 +990,7 @@ function addLineTransitionListener(buttonId) {
 
       let graph;
 
-      createGraphCard("line", "lineTransition " + generatedCanvasId.toString(), "lineTransitionMax" + generatedCanvasId.toString(), "lineTransitionMin" + generatedCanvasId.toString(), "lineTransitionAvg" + generatedCanvasId.toString())
+      createGraphCard(null,"line", "lineTransition " + generatedCanvasId.toString(), "lineTransitionMax" + generatedCanvasId.toString(), "lineTransitionMin" + generatedCanvasId.toString(), "lineTransitionAvg" + generatedCanvasId.toString())
       graph = KidChart("lineTransition", line, 'lineTransition ' + generatedCanvasId.toString());
 
       graphButtons("line", graph, "lineTransitionMax" + generatedCanvasId.toString(), "lineTransitionMin" + generatedCanvasId.toString(), "lineTransitionAvg" + generatedCanvasId.toString())
@@ -1021,7 +1021,7 @@ function addLineChartListener(buttonId) {
 
       let graph;
 
-      createGraphCard("line", "lineChart " + generatedCanvasId.toString(), "lineChartMax" + generatedCanvasId.toString(), "lineChartMin" + generatedCanvasId.toString(), "lineChartAvg" + generatedCanvasId.toString())
+      createGraphCard(null,"line", "lineChart " + generatedCanvasId.toString(), "lineChartMax" + generatedCanvasId.toString(), "lineChartMin" + generatedCanvasId.toString(), "lineChartAvg" + generatedCanvasId.toString())
       graph = KidChart("lineChart", line, 'lineChart ' + generatedCanvasId.toString());
 
       graphButtons("line", graph, "lineChartMax" + generatedCanvasId.toString(), "lineChartMin" + generatedCanvasId.toString(), "lineChartAvg" + generatedCanvasId.toString())
@@ -1280,7 +1280,7 @@ function addBarPictogramListener(buttonId) {
 
         graphButtons("bar", graph, "barPictogramMax" + generatedCanvasId.toString(), "barPictogramMin" + generatedCanvasId.toString(), "barPictogramAvg" + generatedCanvasId.toString())
         generatedCanvasId++;
-        button.remove();
+        tableElement.remove();
       })
       tableId++;
 
@@ -1353,12 +1353,51 @@ function addBarTransitionListener(buttonId) {
       };
 
       let graph;
+      let tableElement = document.createElement("div");
+      let dataCard = document.createElement('div');
+      dataCard.className = 'dataCards';
+      dataCard.id = tableId;
+      let row = document.createElement('div');
+      row.className = 'readRow';
 
-      createGraphCard("bar", "barTransition " + generatedCanvasId.toString(), "barTransitionMax" + generatedCanvasId.toString(), "barTransitionMin" + generatedCanvasId.toString(), "barTransitionAvg" + generatedCanvasId.toString())
+      dataCard.appendChild(row);
+      tableElement.appendChild(dataCard);
+      body.append(tableElement)
+
+      for (let j = 0; j < temp[i].values.length; j++) {
+        addReadCard(tableId, dataCardsId, temp[i].labels[j], temp[i].values[j]);
+       
+        dataCardsId++;
+      }
+
+      let button = document.createElement('button');
+      button.className = 'button-3';
+      button.innerHTML = "Create graph"
+      row.appendChild(button);
+      let o = tableId
+      button.addEventListener('click', function (event) {
+        
+       let res = getData(o)
+       if (typeof res === 'boolean') {
+        alert("Pick all of the emojis!")
+        return;
+      }
+        let line = {
+          type: "bar",
+          color: res.colors,
+          border:res.border,
+          labels: res.labels,
+          values: res.values,
+          unicode: res.unicode,
+        };
+
+      createGraphCard(tableElement,"bar", "barTransition " + generatedCanvasId.toString(), "barTransitionMax" + generatedCanvasId.toString(), "barTransitionMin" + generatedCanvasId.toString(), "barTransitionAvg" + generatedCanvasId.toString())
       graph = KidChart('barTransition', line, "barTransition " + generatedCanvasId.toString());
 
       graphButtons("bar", graph, "barTransitionMax" + generatedCanvasId.toString(), "barTransitionMin" + generatedCanvasId.toString(), "barTransitionAvg" + generatedCanvasId.toString())
       generatedCanvasId++;
+      tableElement.remove()})
+      tableId++
     }
   });
 }
@@ -1384,12 +1423,52 @@ function addBarChartListener(buttonId) {
       };
 
       let graph;
+      let tableElement = document.createElement("div");
+      let dataCard = document.createElement('div');
+      dataCard.className = 'dataCards';
+      dataCard.id = tableId;
+      let row = document.createElement('div');
+      row.className = 'readRow';
 
-      createGraphCard("bar", "barChart " + generatedCanvasId.toString(), "barChartMax" + generatedCanvasId.toString(), "barChartMin" + generatedCanvasId.toString(), "barChartAvg" + generatedCanvasId.toString())
+      dataCard.appendChild(row);
+      tableElement.appendChild(dataCard);
+      body.append(tableElement)
+
+      for (let j = 0; j < temp[i].values.length; j++) {
+        addReadCard(tableId, dataCardsId, temp[i].labels[j], temp[i].values[j]);
+       
+        dataCardsId++;
+      }
+
+      let button = document.createElement('button');
+      button.className = 'button-3';
+      button.innerHTML = "Create graph"
+      row.appendChild(button);
+      let o = tableId
+      button.addEventListener('click', function (event) {
+        
+       let res = getData(o)
+       if (typeof res === 'boolean') {
+        alert("Pick all of the emojis!")
+        return;
+      }
+        let line = {
+          type: "bar",
+          color: res.colors,
+          border:res.border,
+          labels: res.labels,
+          values: res.values,
+          unicode: res.unicode,
+        };
+      
+      createGraphCard(tableElement,"bar", "barChart " + generatedCanvasId.toString(), "barChartMax" + generatedCanvasId.toString(), "barChartMin" + generatedCanvasId.toString(), "barChartAvg" + generatedCanvasId.toString())
       graph = KidChart('barChart', line, "barChart " + generatedCanvasId.toString());
 
       graphButtons("bar", graph, "barChartMax" + generatedCanvasId.toString(), "barChartMin" + generatedCanvasId.toString(), "barChartAvg" + generatedCanvasId.toString())
-
+      generatedCanvasId++
+      tableElement.remove()
+      })
+      tableId++
     }
   });
 }
@@ -1415,11 +1494,51 @@ function addPiePictogramListener(buttonId) {
 
       let graph;
 
-      createGraphCard("pie", "piePictogram " + generatedCanvasId.toString(), "piePictogramMax" + generatedCanvasId.toString(), "piePictogramMin" + generatedCanvasId.toString(), "piePictogramAvg" + generatedCanvasId.toString())
+      let tableElement = document.createElement("div");
+      let dataCard = document.createElement('div');
+      dataCard.className = 'dataCards';
+      dataCard.id = tableId;
+      let row = document.createElement('div');
+      row.className = 'readRow';
+
+      dataCard.appendChild(row);
+      tableElement.appendChild(dataCard);
+      body.append(tableElement)
+
+      for (let j = 0; j < temp[i].values.length; j++) {
+        addReadCard(tableId, dataCardsId, temp[i].labels[j], temp[i].values[j]);
+       
+        dataCardsId++;
+      }
+
+      let button = document.createElement('button');
+      button.className = 'button-3';
+      button.innerHTML = "Create graph"
+      row.appendChild(button);
+      let o = tableId
+      button.addEventListener('click', function (event) {
+        
+       let res = getData(o)
+       if (typeof res === 'boolean') {
+        alert("Pick all of the emojis!")
+        return;
+      }
+        let line = {
+          type: "pie",
+          color: res.colors,
+          border:res.border,
+          labels: res.labels,
+          values: res.values,
+          unicode: res.unicode,
+        };
+
+      createGraphCard(tableElement,"pie", "piePictogram " + generatedCanvasId.toString(), "piePictogramMax" + generatedCanvasId.toString(), "piePictogramMin" + generatedCanvasId.toString(), "piePictogramAvg" + generatedCanvasId.toString())
       graph = KidChart('piePictogram', line, "piePictogram " + generatedCanvasId.toString());
 
       graphButtons("pie", graph, "piePictogramMax" + generatedCanvasId.toString(), "piePictogramMin" + generatedCanvasId.toString(), "piePictogramAvg" + generatedCanvasId.toString())
       generatedCanvasId++
+      tableElement.remove()})
+      tableId++;
     }
   });
 }
@@ -1445,12 +1564,51 @@ function addPieTransitionListener(buttonId) {
       };
 
       let graph;
+      let tableElement = document.createElement("div");
+      let dataCard = document.createElement('div');
+      dataCard.className = 'dataCards';
+      dataCard.id = tableId;
+      let row = document.createElement('div');
+      row.className = 'readRow';
 
-      createGraphCard("pie", "pieTransition " + generatedCanvasId.toString(), "pieTransitionMax" + generatedCanvasId.toString(), "pieTransitionMin" + generatedCanvasId.toString(), "pieTransitionAvg" + generatedCanvasId.toString())
+      dataCard.appendChild(row);
+      tableElement.appendChild(dataCard);
+      body.append(tableElement)
+
+      for (let j = 0; j < temp[i].values.length; j++) {
+        addReadCard(tableId, dataCardsId, temp[i].labels[j], temp[i].values[j]);
+       
+        dataCardsId++;
+      }
+
+      let button = document.createElement('button');
+      button.className = 'button-3';
+      button.innerHTML = "Create graph"
+      row.appendChild(button);
+      let o = tableId
+      button.addEventListener('click', function (event) {
+        
+       let res = getData(o)
+       if (typeof res === 'boolean') {
+        alert("Pick all of the emojis!")
+        return;
+      }
+        let line = {
+          type: "pie",
+          color: res.colors,
+          border:res.border,
+          labels: res.labels,
+          values: res.values,
+          unicode: res.unicode,
+        };
+
+      createGraphCard(tableElement,"pie", "pieTransition " + generatedCanvasId.toString(), "pieTransitionMax" + generatedCanvasId.toString(), "pieTransitionMin" + generatedCanvasId.toString(), "pieTransitionAvg" + generatedCanvasId.toString())
       graph = KidChart('pieTransition', line, "pieTransition " + generatedCanvasId.toString());
 
       graphButtons("pie", graph, "pieTransitionMax" + generatedCanvasId.toString(), "pieTransitionMin" + generatedCanvasId.toString(), "pieTransitionAvg" + generatedCanvasId.toString())
       generatedCanvasId++
+      tableElement.remove()})
+      tableId++
     }
   });
 }
@@ -1475,12 +1633,51 @@ function addPieChartListener(buttonId) {
       };
 
       let graph;
+      let tableElement = document.createElement("div");
+      let dataCard = document.createElement('div');
+      dataCard.className = 'dataCards';
+      dataCard.id = tableId;
+      let row = document.createElement('div');
+      row.className = 'readRow';
 
-      createGraphCard("pie", "pieChart " + generatedCanvasId.toString(), "pieChartMax" + generatedCanvasId.toString(), "pieChartMin" + generatedCanvasId.toString(), "pieChartAvg" + generatedCanvasId.toString())
+      dataCard.appendChild(row);
+      tableElement.appendChild(dataCard);
+      body.append(tableElement)
+
+      for (let j = 0; j < temp[i].values.length; j++) {
+        addReadCard(tableId, dataCardsId, temp[i].labels[j], temp[i].values[j]);
+       
+        dataCardsId++;
+      }
+
+      let button = document.createElement('button');
+      button.className = 'button-3';
+      button.innerHTML = "Create graph"
+      row.appendChild(button);
+      let o = tableId
+      button.addEventListener('click', function (event) {
+        
+       let res = getData(o)
+       if (typeof res === 'boolean') {
+        alert("Pick all of the emojis!")
+        return;
+      }
+        let line = {
+          type: "pie",
+          color: res.colors,
+          border:res.border,
+          labels: res.labels,
+          values: res.values,
+          unicode: res.unicode,
+        };
+
+      createGraphCard(tableElement,"pie", "pieChart " + generatedCanvasId.toString(), "pieChartMax" + generatedCanvasId.toString(), "pieChartMin" + generatedCanvasId.toString(), "pieChartAvg" + generatedCanvasId.toString())
       graph = KidChart('pieChart', line, "pieChart " + generatedCanvasId.toString());
 
       graphButtons("pie", graph, "pieChartMax" + generatedCanvasId.toString(), "pieChartMin" + generatedCanvasId.toString(), "pieChartAvg" + generatedCanvasId.toString())
       generatedCanvasId++
+      tableElement.remove();})
+      tableId++
     }
   });
 }
@@ -1493,7 +1690,7 @@ function KidChart(typeOfChart, userData, canvasId) {
     labels: userData.labels,
     datasets: [
       {
-        label: "Number of fruit",
+        //label: "Number of fruit",
         data: userData.values,
         backgroundColor: userData.color,
         borderColor: userData.border,
@@ -1507,7 +1704,7 @@ function KidChart(typeOfChart, userData, canvasId) {
       labels: userData.labels,
       datasets: [
         {
-          label: "Type of fruit",
+          //label: "Type of fruit",
           data: userData.values,
           backgroundColor: "rgba(255, 255, 255, 0.1)",
           borderColor: userData.color,
@@ -1534,7 +1731,7 @@ function KidChart(typeOfChart, userData, canvasId) {
       labels: userData.labels,
       datasets: [
         {
-          label: "bla",
+          //label: userData.values,
           data: userData.values,
           fill: false,
           backgroundColor: "rgba(255, 255, 255, 0.1)",
