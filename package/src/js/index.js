@@ -617,7 +617,7 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
   let chartCard = document.createElement('div');
   chartCard.className = "chartCard";
   let chartName = document.createElement('div');
-  chartName.innerHTML = canvasId;
+  chartName.innerHTML = canvasId.replace( /^\d+$/,"");
   let chartBox = document.createElement('div');
   chartBox.className = "chartBox";
   let canvas = document.createElement('canvas');
@@ -667,6 +667,14 @@ function createGraphCard(type, canvasId, maxId, minId, avgId) {
     chartCard.appendChild(chartBox);
   }
 
+  let deleteButton = document.createElement("button");
+  deleteButton.className = "button-2"
+  deleteButton.innerHTML = "DELETE";
+  deleteButton.style.backgroundColor="#FFCCCB"
+  buttonDiv.appendChild(deleteButton)
+  deleteButton.addEventListener('click', e => {
+    chartCard.remove();
+  })
   body.appendChild(chartCard);
 }
 

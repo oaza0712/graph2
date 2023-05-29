@@ -428,6 +428,48 @@ div.container3 {
   transform: rotate(45deg);
 }
 
+.chartDeleteButton {
+  border-radius: 50%;
+  padding: 0.5em;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgb(86, 160, 209);
+  color: rgb(86, 160, 209);
+  position: relative;
+}
+
+.chartDeleteButton:hover {
+  border: 3px solid rgb(86, 160, 209);
+  background-color: #eee;
+  color: #ffffff;
+}
+
+.chartDeleteButton::before {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  width: 1px;
+  left: 6px;
+  top: 3px;
+  bottom: 3px;
+  transform: rotate(45deg);
+  margin: 0 auto; 
+}
+
+.chartDeleteButton::after {
+  content: " ";
+  position: absolute;
+  display: block;
+  background-color: rgb(86, 160, 209);
+  height: 1px;
+  top: 6px;
+  left: 3px;
+  right: 3px;
+  transform: rotate(45deg);
+  margin: 0 auto; 
+}
+
 .addDataButton {
   border-radius: 50%;
   padding: 0.5em;
